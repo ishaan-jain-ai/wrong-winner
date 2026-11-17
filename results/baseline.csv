@@ -1,0 +1,571 @@
+pair,truth,human_win_rate_a,n,k,method,rule,reps,correct_rate,wrong_rate,overclaim_rate,no_decision_rate
+alpaca-13b vs claude-v1,B,0.1393,25,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,25,25,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,25,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,25,25,human_only,significant,2000,0.9995,0.0,0.0,0.0005
+alpaca-13b vs claude-v1,B,0.1393,25,10,ppi,significant,2000,0.884,0.0,0.0,0.116
+alpaca-13b vs claude-v1,B,0.1393,25,10,human_only,significant,2000,0.912,0.0,0.0,0.088
+alpaca-13b vs claude-v1,B,0.1393,50,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,50,50,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,50,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,50,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,50,10,ppi,significant,2000,0.927,0.0,0.0,0.073
+alpaca-13b vs claude-v1,B,0.1393,50,10,human_only,significant,2000,0.905,0.0,0.0,0.095
+alpaca-13b vs claude-v1,B,0.1393,50,25,ppi,significant,2000,0.993,0.0,0.0,0.007
+alpaca-13b vs claude-v1,B,0.1393,50,25,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,100,100,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,100,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,100,100,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,100,10,ppi,significant,2000,0.951,0.0,0.0,0.049
+alpaca-13b vs claude-v1,B,0.1393,100,10,human_only,significant,2000,0.917,0.0,0.0,0.083
+alpaca-13b vs claude-v1,B,0.1393,100,25,ppi,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,100,25,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,100,50,ppi,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,100,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,200,200,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,200,200,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,200,10,ppi,significant,2000,0.9575,0.0,0.0,0.0425
+alpaca-13b vs claude-v1,B,0.1393,200,10,human_only,significant,2000,0.9195,0.0,0.0,0.0805
+alpaca-13b vs claude-v1,B,0.1393,200,25,ppi,significant,2000,0.9995,0.0,0.0,0.0005
+alpaca-13b vs claude-v1,B,0.1393,200,25,human_only,significant,2000,0.999,0.0,0.0,0.001
+alpaca-13b vs claude-v1,B,0.1393,200,50,ppi,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,200,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,25,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,25,25,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,25,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,25,25,human_only,significant,2000,0.9885,0.0,0.0,0.0115
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,25,10,ppi,significant,2000,0.662,0.0,0.0,0.338
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,25,10,human_only,significant,2000,0.763,0.0,0.0,0.237
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,50,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,50,50,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,50,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,50,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,50,10,ppi,significant,2000,0.7085,0.0,0.0,0.2915
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,50,10,human_only,significant,2000,0.758,0.0,0.0,0.242
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,50,25,ppi,significant,2000,0.911,0.0,0.0,0.089
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,50,25,human_only,significant,2000,0.9815,0.0,0.0,0.0185
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,100,100,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,100,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,100,100,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,100,10,ppi,significant,2000,0.7405,0.0,0.0,0.2595
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,100,10,human_only,significant,2000,0.7565,0.0,0.0,0.2435
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,100,25,ppi,significant,2000,0.9655,0.0,0.0,0.0345
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,100,25,human_only,significant,2000,0.9855,0.0,0.0,0.0145
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,100,50,ppi,significant,2000,0.996,0.0,0.0,0.004
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,100,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,200,200,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,200,200,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,200,10,ppi,significant,2000,0.758,0.0,0.0,0.242
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,200,10,human_only,significant,2000,0.7675,0.0,0.0,0.2325
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,200,25,ppi,significant,2000,0.9755,0.0,0.0,0.0245
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,200,25,human_only,significant,2000,0.9885,0.0,0.0,0.0115
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,200,50,ppi,significant,2000,0.999,0.0,0.0,0.001
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,200,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,25,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,25,25,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,25,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,25,25,human_only,significant,2000,0.993,0.0,0.0,0.007
+alpaca-13b vs gpt-4,B,0.161,25,10,ppi,significant,2000,0.785,0.0,0.0,0.215
+alpaca-13b vs gpt-4,B,0.161,25,10,human_only,significant,2000,0.786,0.0,0.0,0.214
+alpaca-13b vs gpt-4,B,0.161,50,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,50,50,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,50,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,50,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,50,10,ppi,significant,2000,0.7955,0.0,0.0,0.2045
+alpaca-13b vs gpt-4,B,0.161,50,10,human_only,significant,2000,0.772,0.0,0.0,0.228
+alpaca-13b vs gpt-4,B,0.161,50,25,ppi,significant,2000,0.98,0.0,0.0,0.02
+alpaca-13b vs gpt-4,B,0.161,50,25,human_only,significant,2000,0.9915,0.0,0.0,0.0085
+alpaca-13b vs gpt-4,B,0.161,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,100,100,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,100,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,100,100,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,100,10,ppi,significant,2000,0.8165,0.0,0.0,0.1835
+alpaca-13b vs gpt-4,B,0.161,100,10,human_only,significant,2000,0.7775,0.0,0.0,0.2225
+alpaca-13b vs gpt-4,B,0.161,100,25,ppi,significant,2000,0.9865,0.0,0.0,0.0135
+alpaca-13b vs gpt-4,B,0.161,100,25,human_only,significant,2000,0.9895,0.0,0.0,0.0105
+alpaca-13b vs gpt-4,B,0.161,100,50,ppi,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,100,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,200,200,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,200,200,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,200,10,ppi,significant,2000,0.806,0.0,0.0,0.194
+alpaca-13b vs gpt-4,B,0.161,200,10,human_only,significant,2000,0.784,0.0,0.0,0.216
+alpaca-13b vs gpt-4,B,0.161,200,25,ppi,significant,2000,0.99,0.0,0.0,0.01
+alpaca-13b vs gpt-4,B,0.161,200,25,human_only,significant,2000,0.9905,0.0,0.0,0.0095
+alpaca-13b vs gpt-4,B,0.161,200,50,ppi,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,200,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs llama-13b,A,0.655,25,0,judge,naive,2000,0.999,0.001,0.0,0.0
+alpaca-13b vs llama-13b,A,0.655,25,25,human_only,naive,2000,0.973,0.017,0.0,0.01
+alpaca-13b vs llama-13b,A,0.655,25,0,judge,significant,2000,0.883,0.0,0.0,0.117
+alpaca-13b vs llama-13b,A,0.655,25,25,human_only,significant,2000,0.531,0.0005,0.0,0.4685
+alpaca-13b vs llama-13b,A,0.655,25,10,ppi,significant,2000,0.256,0.001,0.0,0.743
+alpaca-13b vs llama-13b,A,0.655,25,10,human_only,significant,2000,0.271,0.0015,0.0,0.7275
+alpaca-13b vs llama-13b,A,0.655,50,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs llama-13b,A,0.655,50,50,human_only,naive,2000,0.9975,0.001,0.0,0.0015
+alpaca-13b vs llama-13b,A,0.655,50,0,judge,significant,2000,0.9905,0.0,0.0,0.0095
+alpaca-13b vs llama-13b,A,0.655,50,50,human_only,significant,2000,0.8,0.0,0.0,0.2
+alpaca-13b vs llama-13b,A,0.655,50,10,ppi,significant,2000,0.298,0.0,0.0,0.702
+alpaca-13b vs llama-13b,A,0.655,50,10,human_only,significant,2000,0.278,0.002,0.0,0.72
+alpaca-13b vs llama-13b,A,0.655,50,25,ppi,significant,2000,0.3845,0.0005,0.0,0.615
+alpaca-13b vs llama-13b,A,0.655,50,25,human_only,significant,2000,0.5335,0.0,0.0,0.4665
+alpaca-13b vs llama-13b,A,0.655,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs llama-13b,A,0.655,100,100,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs llama-13b,A,0.655,100,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs llama-13b,A,0.655,100,100,human_only,significant,2000,0.977,0.0,0.0,0.023
+alpaca-13b vs llama-13b,A,0.655,100,10,ppi,significant,2000,0.3425,0.0005,0.0,0.657
+alpaca-13b vs llama-13b,A,0.655,100,10,human_only,significant,2000,0.277,0.001,0.0,0.722
+alpaca-13b vs llama-13b,A,0.655,100,25,ppi,significant,2000,0.4725,0.0,0.0,0.5275
+alpaca-13b vs llama-13b,A,0.655,100,25,human_only,significant,2000,0.5335,0.0,0.0,0.4665
+alpaca-13b vs llama-13b,A,0.655,100,50,ppi,significant,2000,0.6165,0.0,0.0,0.3835
+alpaca-13b vs llama-13b,A,0.655,100,50,human_only,significant,2000,0.7965,0.0,0.0,0.2035
+alpaca-13b vs llama-13b,A,0.655,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs llama-13b,A,0.655,200,200,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs llama-13b,A,0.655,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs llama-13b,A,0.655,200,200,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs llama-13b,A,0.655,200,10,ppi,significant,2000,0.355,0.0005,0.0,0.6445
+alpaca-13b vs llama-13b,A,0.655,200,10,human_only,significant,2000,0.3005,0.002,0.0,0.6975
+alpaca-13b vs llama-13b,A,0.655,200,25,ppi,significant,2000,0.5115,0.0,0.0,0.4885
+alpaca-13b vs llama-13b,A,0.655,200,25,human_only,significant,2000,0.532,0.0,0.0,0.468
+alpaca-13b vs llama-13b,A,0.655,200,50,ppi,significant,2000,0.7515,0.0,0.0,0.2485
+alpaca-13b vs llama-13b,A,0.655,200,50,human_only,significant,2000,0.808,0.0,0.0,0.192
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,25,0,judge,naive,2000,0.9995,0.0,0.0,0.0005
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,25,25,human_only,naive,2000,0.982,0.011,0.0,0.007
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,25,0,judge,significant,2000,0.927,0.0,0.0,0.073
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,25,25,human_only,significant,2000,0.645,0.0,0.0,0.355
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,25,10,ppi,significant,2000,0.2665,0.0005,0.0,0.733
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,25,10,human_only,significant,2000,0.327,0.001,0.0,0.672
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,50,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,50,50,human_only,naive,2000,0.999,0.0,0.0,0.001
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,50,0,judge,significant,2000,0.998,0.0,0.0,0.002
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,50,50,human_only,significant,2000,0.8945,0.0,0.0,0.1055
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,50,10,ppi,significant,2000,0.3075,0.001,0.0,0.6915
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,50,10,human_only,significant,2000,0.3245,0.0005,0.0,0.675
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,50,25,ppi,significant,2000,0.4215,0.0,0.0,0.5785
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,50,25,human_only,significant,2000,0.629,0.0,0.0,0.371
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,100,100,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,100,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,100,100,human_only,significant,2000,0.9925,0.0,0.0,0.0075
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,100,10,ppi,significant,2000,0.357,0.0005,0.0,0.6425
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,100,10,human_only,significant,2000,0.349,0.0005,0.0,0.6505
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,100,25,ppi,significant,2000,0.5085,0.0005,0.0,0.491
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,100,25,human_only,significant,2000,0.6245,0.0,0.0,0.3755
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,100,50,ppi,significant,2000,0.662,0.0,0.0,0.338
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,100,50,human_only,significant,2000,0.8915,0.0,0.0,0.1085
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,200,200,human_only,naive,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,200,200,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,200,10,ppi,significant,2000,0.3505,0.0005,0.0,0.649
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,200,10,human_only,significant,2000,0.3295,0.001,0.0,0.6695
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,200,25,ppi,significant,2000,0.5355,0.0,0.0,0.4645
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,200,25,human_only,significant,2000,0.6085,0.0,0.0,0.3915
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,200,50,ppi,significant,2000,0.786,0.0,0.0,0.214
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,200,50,human_only,significant,2000,0.894,0.0,0.0,0.106
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,25,0,judge,naive,2000,0.0,0.0,0.99,0.01
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,25,25,human_only,naive,2000,0.0,0.0,0.904,0.096
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,25,0,judge,significant,2000,0.0,0.0,0.5405,0.4595
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,25,25,human_only,significant,2000,0.0,0.0,0.0575,0.9425
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,25,10,ppi,significant,2000,0.0,0.0,0.067,0.933
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,25,10,human_only,significant,2000,0.0,0.0,0.0895,0.9105
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,50,0,judge,naive,2000,0.0,0.0,0.999,0.001
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,50,50,human_only,naive,2000,0.0,0.0,0.93,0.07
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,50,0,judge,significant,2000,0.0,0.0,0.7995,0.2005
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,50,50,human_only,significant,2000,0.0,0.0,0.0565,0.9435
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,50,10,ppi,significant,2000,0.0,0.0,0.0805,0.9195
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,50,10,human_only,significant,2000,0.0,0.0,0.0875,0.9125
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,50,25,ppi,significant,2000,0.0,0.0,0.0615,0.9385
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,50,25,human_only,significant,2000,0.0,0.0,0.068,0.932
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,100,0,judge,naive,2000,0.0,0.0,1.0,0.0
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,100,100,human_only,naive,2000,0.0,0.0,0.9525,0.0475
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,100,0,judge,significant,2000,0.0,0.0,0.981,0.019
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,100,100,human_only,significant,2000,0.0,0.0,0.0515,0.9485
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,100,10,ppi,significant,2000,0.0,0.0,0.0765,0.9235
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,100,10,human_only,significant,2000,0.0,0.0,0.078,0.922
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,100,25,ppi,significant,2000,0.0,0.0,0.0495,0.9505
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,100,25,human_only,significant,2000,0.0,0.0,0.0655,0.9345
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,100,50,ppi,significant,2000,0.0,0.0,0.0615,0.9385
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,100,50,human_only,significant,2000,0.0,0.0,0.074,0.926
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,200,0,judge,naive,2000,0.0,0.0,1.0,0.0
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,200,200,human_only,naive,2000,0.0,0.0,0.965,0.035
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,200,0,judge,significant,2000,0.0,0.0,1.0,0.0
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,200,200,human_only,significant,2000,0.0,0.0,0.075,0.925
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,200,10,ppi,significant,2000,0.0,0.0,0.081,0.919
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,200,10,human_only,significant,2000,0.0,0.0,0.078,0.922
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,200,25,ppi,significant,2000,0.0,0.0,0.0615,0.9385
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,200,25,human_only,significant,2000,0.0,0.0,0.067,0.933
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,200,50,ppi,significant,2000,0.0,0.0,0.056,0.944
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,200,50,human_only,significant,2000,0.0,0.0,0.0625,0.9375
+claude-v1 vs gpt-4,B,0.4144,25,0,judge,naive,2000,0.9735,0.0125,0.0,0.014
+claude-v1 vs gpt-4,B,0.4144,25,25,human_only,naive,2000,0.8235,0.12,0.0,0.0565
+claude-v1 vs gpt-4,B,0.4144,25,0,judge,significant,2000,0.562,0.0,0.0,0.438
+claude-v1 vs gpt-4,B,0.4144,25,25,human_only,significant,2000,0.2075,0.0015,0.0,0.791
+claude-v1 vs gpt-4,B,0.4144,25,10,ppi,significant,2000,0.097,0.0115,0.0,0.8915
+claude-v1 vs gpt-4,B,0.4144,25,10,human_only,significant,2000,0.131,0.0075,0.0,0.8615
+claude-v1 vs gpt-4,B,0.4144,50,0,judge,naive,2000,0.9975,0.0015,0.0,0.001
+claude-v1 vs gpt-4,B,0.4144,50,50,human_only,naive,2000,0.918,0.0565,0.0,0.0255
+claude-v1 vs gpt-4,B,0.4144,50,0,judge,significant,2000,0.8325,0.0,0.0,0.1675
+claude-v1 vs gpt-4,B,0.4144,50,50,human_only,significant,2000,0.3445,0.0,0.0,0.6555
+claude-v1 vs gpt-4,B,0.4144,50,10,ppi,significant,2000,0.115,0.0075,0.0,0.8775
+claude-v1 vs gpt-4,B,0.4144,50,10,human_only,significant,2000,0.138,0.0075,0.0,0.8545
+claude-v1 vs gpt-4,B,0.4144,50,25,ppi,significant,2000,0.1005,0.004,0.0,0.8955
+claude-v1 vs gpt-4,B,0.4144,50,25,human_only,significant,2000,0.197,0.0015,0.0,0.8015
+claude-v1 vs gpt-4,B,0.4144,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs gpt-4,B,0.4144,100,100,human_only,naive,2000,0.9785,0.018,0.0,0.0035
+claude-v1 vs gpt-4,B,0.4144,100,0,judge,significant,2000,0.9815,0.0,0.0,0.0185
+claude-v1 vs gpt-4,B,0.4144,100,100,human_only,significant,2000,0.573,0.0,0.0,0.427
+claude-v1 vs gpt-4,B,0.4144,100,10,ppi,significant,2000,0.111,0.007,0.0,0.882
+claude-v1 vs gpt-4,B,0.4144,100,10,human_only,significant,2000,0.128,0.005,0.0,0.867
+claude-v1 vs gpt-4,B,0.4144,100,25,ppi,significant,2000,0.1395,0.004,0.0,0.8565
+claude-v1 vs gpt-4,B,0.4144,100,25,human_only,significant,2000,0.2105,0.0025,0.0,0.787
+claude-v1 vs gpt-4,B,0.4144,100,50,ppi,significant,2000,0.165,0.0,0.0,0.835
+claude-v1 vs gpt-4,B,0.4144,100,50,human_only,significant,2000,0.337,0.0,0.0,0.663
+claude-v1 vs gpt-4,B,0.4144,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs gpt-4,B,0.4144,200,200,human_only,naive,2000,0.9965,0.0015,0.0,0.002
+claude-v1 vs gpt-4,B,0.4144,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs gpt-4,B,0.4144,200,200,human_only,significant,2000,0.841,0.0,0.0,0.159
+claude-v1 vs gpt-4,B,0.4144,200,10,ppi,significant,2000,0.114,0.0065,0.0,0.8795
+claude-v1 vs gpt-4,B,0.4144,200,10,human_only,significant,2000,0.1225,0.0055,0.0,0.872
+claude-v1 vs gpt-4,B,0.4144,200,25,ppi,significant,2000,0.135,0.0025,0.0,0.8625
+claude-v1 vs gpt-4,B,0.4144,200,25,human_only,significant,2000,0.2055,0.0025,0.0,0.792
+claude-v1 vs gpt-4,B,0.4144,200,50,ppi,significant,2000,0.218,0.001,0.0,0.781
+claude-v1 vs gpt-4,B,0.4144,200,50,human_only,significant,2000,0.3395,0.0005,0.0,0.66
+claude-v1 vs llama-13b,A,0.8694,25,0,judge,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,25,25,human_only,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,25,0,judge,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,25,25,human_only,significant,2000,0.9995,0.0,0.0,0.0005
+claude-v1 vs llama-13b,A,0.8694,25,10,ppi,significant,2000,0.874,0.0,0.0,0.126
+claude-v1 vs llama-13b,A,0.8694,25,10,human_only,significant,2000,0.8935,0.0,0.0,0.1065
+claude-v1 vs llama-13b,A,0.8694,50,0,judge,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,50,50,human_only,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,50,0,judge,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,50,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,50,10,ppi,significant,2000,0.9065,0.0,0.0,0.0935
+claude-v1 vs llama-13b,A,0.8694,50,10,human_only,significant,2000,0.8965,0.0,0.0,0.1035
+claude-v1 vs llama-13b,A,0.8694,50,25,ppi,significant,2000,0.997,0.0,0.0,0.003
+claude-v1 vs llama-13b,A,0.8694,50,25,human_only,significant,2000,0.9995,0.0,0.0,0.0005
+claude-v1 vs llama-13b,A,0.8694,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,100,100,human_only,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,100,0,judge,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,100,100,human_only,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,100,10,ppi,significant,2000,0.9085,0.0,0.0,0.0915
+claude-v1 vs llama-13b,A,0.8694,100,10,human_only,significant,2000,0.903,0.0,0.0,0.097
+claude-v1 vs llama-13b,A,0.8694,100,25,ppi,significant,2000,0.999,0.0,0.0,0.001
+claude-v1 vs llama-13b,A,0.8694,100,25,human_only,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,100,50,ppi,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,100,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,200,200,human_only,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,200,200,human_only,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,200,10,ppi,significant,2000,0.8995,0.0,0.0,0.1005
+claude-v1 vs llama-13b,A,0.8694,200,10,human_only,significant,2000,0.8995,0.0,0.0,0.1005
+claude-v1 vs llama-13b,A,0.8694,200,25,ppi,significant,2000,0.9985,0.0,0.0,0.0015
+claude-v1 vs llama-13b,A,0.8694,200,25,human_only,significant,2000,0.9985,0.0,0.0,0.0015
+claude-v1 vs llama-13b,A,0.8694,200,50,ppi,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs llama-13b,A,0.8694,200,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,25,0,judge,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,25,25,human_only,naive,2000,0.9865,0.0065,0.0,0.007
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,25,0,judge,significant,2000,0.9785,0.0,0.0,0.0215
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,25,25,human_only,significant,2000,0.6725,0.0,0.0,0.3275
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,25,10,ppi,significant,2000,0.2915,0.0005,0.0,0.708
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,25,10,human_only,significant,2000,0.3585,0.0005,0.0,0.641
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,50,0,judge,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,50,50,human_only,naive,2000,0.9995,0.0005,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,50,0,judge,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,50,50,human_only,significant,2000,0.9125,0.0,0.0,0.0875
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,50,10,ppi,significant,2000,0.3185,0.0,0.0,0.6815
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,50,10,human_only,significant,2000,0.352,0.002,0.0,0.646
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,50,25,ppi,significant,2000,0.453,0.0,0.0,0.547
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,50,25,human_only,significant,2000,0.666,0.0,0.0,0.334
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,100,100,human_only,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,100,0,judge,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,100,100,human_only,significant,2000,0.994,0.0,0.0,0.006
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,100,10,ppi,significant,2000,0.362,0.001,0.0,0.637
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,100,10,human_only,significant,2000,0.367,0.0005,0.0,0.6325
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,100,25,ppi,significant,2000,0.542,0.0,0.0,0.458
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,100,25,human_only,significant,2000,0.66,0.0,0.0,0.34
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,100,50,ppi,significant,2000,0.7285,0.0,0.0,0.2715
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,100,50,human_only,significant,2000,0.9125,0.0,0.0,0.0875
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,200,200,human_only,naive,2000,1.0,0.0,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,200,200,human_only,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,200,10,ppi,significant,2000,0.3685,0.0005,0.0,0.631
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,200,10,human_only,significant,2000,0.37,0.0005,0.0,0.6295
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,200,25,ppi,significant,2000,0.5905,0.0,0.0,0.4095
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,200,25,human_only,significant,2000,0.673,0.0,0.0,0.327
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,200,50,ppi,significant,2000,0.825,0.0,0.0,0.175
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,200,50,human_only,significant,2000,0.9085,0.0,0.0,0.0915
+gpt-3.5-turbo vs gpt-4,B,0.3846,25,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs gpt-4,B,0.3846,25,25,human_only,naive,2000,0.8895,0.072,0.0,0.0385
+gpt-3.5-turbo vs gpt-4,B,0.3846,25,0,judge,significant,2000,0.992,0.0,0.0,0.008
+gpt-3.5-turbo vs gpt-4,B,0.3846,25,25,human_only,significant,2000,0.313,0.0005,0.0,0.6865
+gpt-3.5-turbo vs gpt-4,B,0.3846,25,10,ppi,significant,2000,0.1345,0.0035,0.0,0.862
+gpt-3.5-turbo vs gpt-4,B,0.3846,25,10,human_only,significant,2000,0.177,0.003,0.0,0.82
+gpt-3.5-turbo vs gpt-4,B,0.3846,50,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs gpt-4,B,0.3846,50,50,human_only,naive,2000,0.977,0.014,0.0,0.009
+gpt-3.5-turbo vs gpt-4,B,0.3846,50,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs gpt-4,B,0.3846,50,50,human_only,significant,2000,0.5275,0.0,0.0,0.4725
+gpt-3.5-turbo vs gpt-4,B,0.3846,50,10,ppi,significant,2000,0.167,0.0065,0.0,0.8265
+gpt-3.5-turbo vs gpt-4,B,0.3846,50,10,human_only,significant,2000,0.1825,0.004,0.0,0.8135
+gpt-3.5-turbo vs gpt-4,B,0.3846,50,25,ppi,significant,2000,0.221,0.001,0.0,0.778
+gpt-3.5-turbo vs gpt-4,B,0.3846,50,25,human_only,significant,2000,0.3215,0.0,0.0,0.6785
+gpt-3.5-turbo vs gpt-4,B,0.3846,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs gpt-4,B,0.3846,100,100,human_only,naive,2000,0.994,0.0035,0.0,0.0025
+gpt-3.5-turbo vs gpt-4,B,0.3846,100,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs gpt-4,B,0.3846,100,100,human_only,significant,2000,0.7985,0.0,0.0,0.2015
+gpt-3.5-turbo vs gpt-4,B,0.3846,100,10,ppi,significant,2000,0.1705,0.0025,0.0,0.827
+gpt-3.5-turbo vs gpt-4,B,0.3846,100,10,human_only,significant,2000,0.169,0.004,0.0,0.827
+gpt-3.5-turbo vs gpt-4,B,0.3846,100,25,ppi,significant,2000,0.2495,0.001,0.0,0.7495
+gpt-3.5-turbo vs gpt-4,B,0.3846,100,25,human_only,significant,2000,0.323,0.001,0.0,0.676
+gpt-3.5-turbo vs gpt-4,B,0.3846,100,50,ppi,significant,2000,0.3335,0.0,0.0,0.6665
+gpt-3.5-turbo vs gpt-4,B,0.3846,100,50,human_only,significant,2000,0.524,0.0,0.0,0.476
+gpt-3.5-turbo vs gpt-4,B,0.3846,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs gpt-4,B,0.3846,200,200,human_only,naive,2000,0.9995,0.0005,0.0,0.0
+gpt-3.5-turbo vs gpt-4,B,0.3846,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs gpt-4,B,0.3846,200,200,human_only,significant,2000,0.9775,0.0,0.0,0.0225
+gpt-3.5-turbo vs gpt-4,B,0.3846,200,10,ppi,significant,2000,0.1715,0.003,0.0,0.8255
+gpt-3.5-turbo vs gpt-4,B,0.3846,200,10,human_only,significant,2000,0.183,0.0045,0.0,0.8125
+gpt-3.5-turbo vs gpt-4,B,0.3846,200,25,ppi,significant,2000,0.2525,0.001,0.0,0.7465
+gpt-3.5-turbo vs gpt-4,B,0.3846,200,25,human_only,significant,2000,0.3195,0.0,0.0,0.6805
+gpt-3.5-turbo vs gpt-4,B,0.3846,200,50,ppi,significant,2000,0.414,0.0,0.0,0.586
+gpt-3.5-turbo vs gpt-4,B,0.3846,200,50,human_only,significant,2000,0.537,0.0,0.0,0.463
+gpt-3.5-turbo vs llama-13b,A,0.8903,25,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,25,25,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,25,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,25,25,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,25,10,ppi,significant,2000,0.8995,0.0,0.0,0.1005
+gpt-3.5-turbo vs llama-13b,A,0.8903,25,10,human_only,significant,2000,0.9305,0.0,0.0,0.0695
+gpt-3.5-turbo vs llama-13b,A,0.8903,50,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,50,50,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,50,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,50,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,50,10,ppi,significant,2000,0.928,0.0,0.0,0.072
+gpt-3.5-turbo vs llama-13b,A,0.8903,50,10,human_only,significant,2000,0.9375,0.0,0.0,0.0625
+gpt-3.5-turbo vs llama-13b,A,0.8903,50,25,ppi,significant,2000,0.9995,0.0,0.0,0.0005
+gpt-3.5-turbo vs llama-13b,A,0.8903,50,25,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,100,100,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,100,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,100,100,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,100,10,ppi,significant,2000,0.921,0.0,0.0,0.079
+gpt-3.5-turbo vs llama-13b,A,0.8903,100,10,human_only,significant,2000,0.925,0.0,0.0,0.075
+gpt-3.5-turbo vs llama-13b,A,0.8903,100,25,ppi,significant,2000,0.999,0.0,0.0,0.001
+gpt-3.5-turbo vs llama-13b,A,0.8903,100,25,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,100,50,ppi,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,100,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,200,200,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,200,200,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,200,10,ppi,significant,2000,0.928,0.0,0.0,0.072
+gpt-3.5-turbo vs llama-13b,A,0.8903,200,10,human_only,significant,2000,0.9365,0.0,0.0,0.0635
+gpt-3.5-turbo vs llama-13b,A,0.8903,200,25,ppi,significant,2000,0.9985,0.0,0.0,0.0015
+gpt-3.5-turbo vs llama-13b,A,0.8903,200,25,human_only,significant,2000,0.9995,0.0,0.0,0.0005
+gpt-3.5-turbo vs llama-13b,A,0.8903,200,50,ppi,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,200,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,25,0,judge,naive,2000,0.9865,0.008,0.0,0.0055
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,25,25,human_only,naive,2000,0.9635,0.0225,0.0,0.014
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,25,0,judge,significant,2000,0.673,0.0,0.0,0.327
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,25,25,human_only,significant,2000,0.511,0.0,0.0,0.489
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,25,10,ppi,significant,2000,0.192,0.0005,0.0,0.8075
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,25,10,human_only,significant,2000,0.27,0.0015,0.0,0.7285
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,50,0,judge,naive,2000,0.999,0.0005,0.0,0.0005
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,50,50,human_only,naive,2000,0.997,0.002,0.0,0.001
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,50,0,judge,significant,2000,0.9055,0.0,0.0,0.0945
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,50,50,human_only,significant,2000,0.7605,0.0,0.0,0.2395
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,50,10,ppi,significant,2000,0.2515,0.0005,0.0,0.748
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,50,10,human_only,significant,2000,0.277,0.0025,0.0,0.7205
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,50,25,ppi,significant,2000,0.2835,0.0005,0.0,0.716
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,50,25,human_only,significant,2000,0.498,0.0005,0.0,0.5015
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,100,100,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,100,0,judge,significant,2000,0.997,0.0,0.0,0.003
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,100,100,human_only,significant,2000,0.9705,0.0,0.0,0.0295
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,100,10,ppi,significant,2000,0.251,0.0005,0.0,0.7485
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,100,10,human_only,significant,2000,0.26,0.002,0.0,0.738
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,100,25,ppi,significant,2000,0.402,0.0,0.0,0.598
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,100,25,human_only,significant,2000,0.488,0.0005,0.0,0.5115
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,100,50,ppi,significant,2000,0.5095,0.0,0.0,0.4905
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,100,50,human_only,significant,2000,0.7705,0.0,0.0,0.2295
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,200,200,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,200,200,human_only,significant,2000,0.999,0.0,0.0,0.001
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,200,10,ppi,significant,2000,0.2775,0.0015,0.0,0.721
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,200,10,human_only,significant,2000,0.2735,0.0005,0.0,0.726
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,200,25,ppi,significant,2000,0.416,0.0,0.0,0.584
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,200,25,human_only,significant,2000,0.495,0.0,0.0,0.505
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,200,50,ppi,significant,2000,0.62,0.0,0.0,0.38
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,200,50,human_only,significant,2000,0.773,0.0,0.0,0.227
+gpt-4 vs llama-13b,A,0.8709,25,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,25,25,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,25,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,25,25,human_only,significant,2000,0.9995,0.0,0.0,0.0005
+gpt-4 vs llama-13b,A,0.8709,25,10,ppi,significant,2000,0.881,0.0,0.0,0.119
+gpt-4 vs llama-13b,A,0.8709,25,10,human_only,significant,2000,0.9,0.0,0.0,0.1
+gpt-4 vs llama-13b,A,0.8709,50,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,50,50,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,50,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,50,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,50,10,ppi,significant,2000,0.8945,0.0,0.0,0.1055
+gpt-4 vs llama-13b,A,0.8709,50,10,human_only,significant,2000,0.894,0.0,0.0,0.106
+gpt-4 vs llama-13b,A,0.8709,50,25,ppi,significant,2000,0.999,0.0,0.0,0.001
+gpt-4 vs llama-13b,A,0.8709,50,25,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,100,100,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,100,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,100,100,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,100,10,ppi,significant,2000,0.911,0.0,0.0,0.089
+gpt-4 vs llama-13b,A,0.8709,100,10,human_only,significant,2000,0.904,0.0,0.0,0.096
+gpt-4 vs llama-13b,A,0.8709,100,25,ppi,significant,2000,0.999,0.0,0.0,0.001
+gpt-4 vs llama-13b,A,0.8709,100,25,human_only,significant,2000,0.9995,0.0,0.0,0.0005
+gpt-4 vs llama-13b,A,0.8709,100,50,ppi,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,100,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,200,200,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,200,200,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,200,10,ppi,significant,2000,0.9085,0.0,0.0,0.0915
+gpt-4 vs llama-13b,A,0.8709,200,10,human_only,significant,2000,0.8995,0.0,0.0,0.1005
+gpt-4 vs llama-13b,A,0.8709,200,25,ppi,significant,2000,0.9995,0.0,0.0,0.0005
+gpt-4 vs llama-13b,A,0.8709,200,25,human_only,significant,2000,0.9995,0.0,0.0,0.0005
+gpt-4 vs llama-13b,A,0.8709,200,50,ppi,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,200,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,25,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,25,25,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,25,0,judge,significant,2000,0.9985,0.0,0.0,0.0015
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,25,25,human_only,significant,2000,0.9395,0.0,0.0,0.0605
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,25,10,ppi,significant,2000,0.467,0.0,0.0,0.533
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,25,10,human_only,significant,2000,0.611,0.0,0.0,0.389
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,50,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,50,50,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,50,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,50,50,human_only,significant,2000,0.998,0.0,0.0,0.002
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,50,10,ppi,significant,2000,0.5185,0.0005,0.0,0.481
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,50,10,human_only,significant,2000,0.616,0.0,0.0,0.384
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,50,25,ppi,significant,2000,0.7745,0.0,0.0,0.2255
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,50,25,human_only,significant,2000,0.9395,0.0,0.0,0.0605
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,100,100,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,100,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,100,100,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,100,10,ppi,significant,2000,0.528,0.0,0.0,0.472
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,100,10,human_only,significant,2000,0.5985,0.0,0.0,0.4015
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,100,25,ppi,significant,2000,0.844,0.0,0.0,0.156
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,100,25,human_only,significant,2000,0.936,0.0,0.0,0.064
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,100,50,ppi,significant,2000,0.9585,0.0,0.0,0.0415
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,100,50,human_only,significant,2000,0.998,0.0,0.0,0.002
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,200,200,human_only,naive,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,200,200,human_only,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,200,10,ppi,significant,2000,0.5535,0.0,0.0,0.4465
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,200,10,human_only,significant,2000,0.625,0.0,0.0,0.375
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,200,25,ppi,significant,2000,0.864,0.0,0.0,0.136
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,200,25,human_only,significant,2000,0.941,0.0,0.0,0.059
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,200,50,ppi,significant,2000,0.985,0.0,0.0,0.015
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,200,50,human_only,significant,2000,0.998,0.0,0.0,0.002
+llama-13b vs vicuna-13b-v1.2,B,0.1975,25,0,judge,naive,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,25,25,human_only,naive,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,25,0,judge,significant,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,25,25,human_only,significant,2000,0.9815,0.0,0.0,0.0185
+llama-13b vs vicuna-13b-v1.2,B,0.1975,25,10,ppi,significant,2000,0.7095,0.0,0.0,0.2905
+llama-13b vs vicuna-13b-v1.2,B,0.1975,25,10,human_only,significant,2000,0.785,0.0,0.0,0.215
+llama-13b vs vicuna-13b-v1.2,B,0.1975,50,0,judge,naive,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,50,50,human_only,naive,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,50,0,judge,significant,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,50,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,50,10,ppi,significant,2000,0.76,0.0,0.0,0.24
+llama-13b vs vicuna-13b-v1.2,B,0.1975,50,10,human_only,significant,2000,0.749,0.0,0.0,0.251
+llama-13b vs vicuna-13b-v1.2,B,0.1975,50,25,ppi,significant,2000,0.933,0.0,0.0,0.067
+llama-13b vs vicuna-13b-v1.2,B,0.1975,50,25,human_only,significant,2000,0.9855,0.0,0.0,0.0145
+llama-13b vs vicuna-13b-v1.2,B,0.1975,100,0,judge,naive,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,100,100,human_only,naive,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,100,0,judge,significant,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,100,100,human_only,significant,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,100,10,ppi,significant,2000,0.7945,0.0,0.0,0.2055
+llama-13b vs vicuna-13b-v1.2,B,0.1975,100,10,human_only,significant,2000,0.7815,0.0,0.0,0.2185
+llama-13b vs vicuna-13b-v1.2,B,0.1975,100,25,ppi,significant,2000,0.98,0.0,0.0,0.02
+llama-13b vs vicuna-13b-v1.2,B,0.1975,100,25,human_only,significant,2000,0.9865,0.0,0.0,0.0135
+llama-13b vs vicuna-13b-v1.2,B,0.1975,100,50,ppi,significant,2000,0.998,0.0,0.0,0.002
+llama-13b vs vicuna-13b-v1.2,B,0.1975,100,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,200,0,judge,naive,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,200,200,human_only,naive,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,200,0,judge,significant,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,200,200,human_only,significant,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,200,10,ppi,significant,2000,0.7895,0.0,0.0,0.2105
+llama-13b vs vicuna-13b-v1.2,B,0.1975,200,10,human_only,significant,2000,0.7575,0.0,0.0,0.2425
+llama-13b vs vicuna-13b-v1.2,B,0.1975,200,25,ppi,significant,2000,0.981,0.0,0.0,0.019
+llama-13b vs vicuna-13b-v1.2,B,0.1975,200,25,human_only,significant,2000,0.9835,0.0,0.0,0.0165
+llama-13b vs vicuna-13b-v1.2,B,0.1975,200,50,ppi,significant,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,200,50,human_only,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs claude-v1,B,0.1393,100,25,transport_from:alpaca-13b vs gpt-3.5-turbo,significant,2000,0.964,0.0,0.0,0.036
+alpaca-13b vs claude-v1,B,0.1393,100,50,transport_from:alpaca-13b vs gpt-3.5-turbo,significant,2000,0.999,0.0,0.0,0.001
+alpaca-13b vs claude-v1,B,0.1393,200,25,transport_from:alpaca-13b vs gpt-3.5-turbo,significant,2000,0.9715,0.0,0.0,0.0285
+alpaca-13b vs claude-v1,B,0.1393,200,50,transport_from:alpaca-13b vs gpt-3.5-turbo,significant,2000,0.9995,0.0,0.0,0.0005
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,100,25,transport_from:alpaca-13b vs gpt-4,significant,2000,0.9225,0.0,0.0,0.0775
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,100,50,transport_from:alpaca-13b vs gpt-4,significant,2000,0.996,0.0,0.0,0.004
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,200,25,transport_from:alpaca-13b vs gpt-4,significant,2000,0.9415,0.0,0.0,0.0585
+alpaca-13b vs gpt-3.5-turbo,B,0.1953,200,50,transport_from:alpaca-13b vs gpt-4,significant,2000,0.998,0.0,0.0,0.002
+alpaca-13b vs gpt-4,B,0.161,100,25,transport_from:alpaca-13b vs llama-13b,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,100,50,transport_from:alpaca-13b vs llama-13b,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,200,25,transport_from:alpaca-13b vs llama-13b,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs gpt-4,B,0.161,200,50,transport_from:alpaca-13b vs llama-13b,significant,2000,1.0,0.0,0.0,0.0
+alpaca-13b vs llama-13b,A,0.655,100,25,transport_from:alpaca-13b vs vicuna-13b-v1.2,significant,2000,0.895,0.0,0.0,0.105
+alpaca-13b vs llama-13b,A,0.655,100,50,transport_from:alpaca-13b vs vicuna-13b-v1.2,significant,2000,0.987,0.0,0.0,0.013
+alpaca-13b vs llama-13b,A,0.655,200,25,transport_from:alpaca-13b vs vicuna-13b-v1.2,significant,2000,0.9095,0.0,0.0,0.0905
+alpaca-13b vs llama-13b,A,0.655,200,50,transport_from:alpaca-13b vs vicuna-13b-v1.2,significant,2000,0.9915,0.0,0.0,0.0085
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,100,25,transport_from:claude-v1 vs gpt-3.5-turbo,significant,2000,0.9595,0.0,0.0,0.0405
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,100,50,transport_from:claude-v1 vs gpt-3.5-turbo,significant,2000,0.9975,0.0,0.0,0.0025
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,200,25,transport_from:claude-v1 vs gpt-3.5-turbo,significant,2000,0.9615,0.0,0.0,0.0385
+alpaca-13b vs vicuna-13b-v1.2,B,0.3232,200,50,transport_from:claude-v1 vs gpt-3.5-turbo,significant,2000,0.9995,0.0,0.0,0.0005
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,100,25,transport_from:claude-v1 vs gpt-4,significant,2000,0.0,0.0,0.502,0.498
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,100,50,transport_from:claude-v1 vs gpt-4,significant,2000,0.0,0.0,0.741,0.259
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,200,25,transport_from:claude-v1 vs gpt-4,significant,2000,0.0,0.0,0.531,0.469
+claude-v1 vs gpt-3.5-turbo,too_close,0.5094,200,50,transport_from:claude-v1 vs gpt-4,significant,2000,0.0,0.0,0.7845,0.2155
+claude-v1 vs gpt-4,B,0.4144,100,25,transport_from:claude-v1 vs llama-13b,significant,2000,0.918,0.0,0.0,0.082
+claude-v1 vs gpt-4,B,0.4144,100,50,transport_from:claude-v1 vs llama-13b,significant,2000,0.982,0.0,0.0,0.018
+claude-v1 vs gpt-4,B,0.4144,200,25,transport_from:claude-v1 vs llama-13b,significant,2000,0.9625,0.0,0.0,0.0375
+claude-v1 vs gpt-4,B,0.4144,200,50,transport_from:claude-v1 vs llama-13b,significant,2000,0.9965,0.0,0.0,0.0035
+claude-v1 vs llama-13b,A,0.8694,100,25,transport_from:claude-v1 vs vicuna-13b-v1.2,significant,2000,0.95,0.0,0.0,0.05
+claude-v1 vs llama-13b,A,0.8694,100,50,transport_from:claude-v1 vs vicuna-13b-v1.2,significant,2000,0.9995,0.0,0.0,0.0005
+claude-v1 vs llama-13b,A,0.8694,200,25,transport_from:claude-v1 vs vicuna-13b-v1.2,significant,2000,0.9615,0.0,0.0,0.0385
+claude-v1 vs llama-13b,A,0.8694,200,50,transport_from:claude-v1 vs vicuna-13b-v1.2,significant,2000,0.999,0.0,0.0,0.001
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,100,25,transport_from:gpt-3.5-turbo vs gpt-4,significant,2000,0.9995,0.0,0.0,0.0005
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,100,50,transport_from:gpt-3.5-turbo vs gpt-4,significant,2000,1.0,0.0,0.0,0.0
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,200,25,transport_from:gpt-3.5-turbo vs gpt-4,significant,2000,0.9995,0.0,0.0,0.0005
+claude-v1 vs vicuna-13b-v1.2,A,0.6906,200,50,transport_from:gpt-3.5-turbo vs gpt-4,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs gpt-4,B,0.3846,100,25,transport_from:gpt-3.5-turbo vs llama-13b,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs gpt-4,B,0.3846,100,50,transport_from:gpt-3.5-turbo vs llama-13b,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs gpt-4,B,0.3846,200,25,transport_from:gpt-3.5-turbo vs llama-13b,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs gpt-4,B,0.3846,200,50,transport_from:gpt-3.5-turbo vs llama-13b,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,100,25,transport_from:gpt-3.5-turbo vs vicuna-13b-v1.2,significant,2000,0.997,0.0,0.0,0.003
+gpt-3.5-turbo vs llama-13b,A,0.8903,100,50,transport_from:gpt-3.5-turbo vs vicuna-13b-v1.2,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs llama-13b,A,0.8903,200,25,transport_from:gpt-3.5-turbo vs vicuna-13b-v1.2,significant,2000,0.998,0.0,0.0,0.002
+gpt-3.5-turbo vs llama-13b,A,0.8903,200,50,transport_from:gpt-3.5-turbo vs vicuna-13b-v1.2,significant,2000,1.0,0.0,0.0,0.0
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,100,25,transport_from:gpt-4 vs llama-13b,significant,2000,0.2085,0.001,0.0,0.7905
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,100,50,transport_from:gpt-4 vs llama-13b,significant,2000,0.222,0.0025,0.0,0.7755
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,200,25,transport_from:gpt-4 vs llama-13b,significant,2000,0.2425,0.0,0.0,0.7575
+gpt-3.5-turbo vs vicuna-13b-v1.2,A,0.6463,200,50,transport_from:gpt-4 vs llama-13b,significant,2000,0.284,0.0005,0.0,0.7155
+gpt-4 vs llama-13b,A,0.8709,100,25,transport_from:gpt-4 vs vicuna-13b-v1.2,significant,2000,0.984,0.0,0.0,0.016
+gpt-4 vs llama-13b,A,0.8709,100,50,transport_from:gpt-4 vs vicuna-13b-v1.2,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs llama-13b,A,0.8709,200,25,transport_from:gpt-4 vs vicuna-13b-v1.2,significant,2000,0.9865,0.0,0.0,0.0135
+gpt-4 vs llama-13b,A,0.8709,200,50,transport_from:gpt-4 vs vicuna-13b-v1.2,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,100,25,transport_from:llama-13b vs vicuna-13b-v1.2,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,100,50,transport_from:llama-13b vs vicuna-13b-v1.2,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,200,25,transport_from:llama-13b vs vicuna-13b-v1.2,significant,2000,1.0,0.0,0.0,0.0
+gpt-4 vs vicuna-13b-v1.2,A,0.7753,200,50,transport_from:llama-13b vs vicuna-13b-v1.2,significant,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,100,25,transport_from:alpaca-13b vs claude-v1,significant,2000,0.9975,0.0,0.0,0.0025
+llama-13b vs vicuna-13b-v1.2,B,0.1975,100,50,transport_from:alpaca-13b vs claude-v1,significant,2000,1.0,0.0,0.0,0.0
+llama-13b vs vicuna-13b-v1.2,B,0.1975,200,25,transport_from:alpaca-13b vs claude-v1,significant,2000,0.9985,0.0,0.0,0.0015
+llama-13b vs vicuna-13b-v1.2,B,0.1975,200,50,transport_from:alpaca-13b vs claude-v1,significant,2000,1.0,0.0,0.0,0.0
