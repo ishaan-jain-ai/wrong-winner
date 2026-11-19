@@ -26,7 +26,7 @@ def winner_to_score(winner: str) -> float:
         return 1.0
     if w == "model_b":
         return 0.0
-    if w.startswith("tie"):
+    if w.startswith("tie") or w == "both_bad":  # LMArena's "both bad" counts as a tie
         return 0.5
     raise ValueError(f"unrecognised winner value: {winner!r}")
 

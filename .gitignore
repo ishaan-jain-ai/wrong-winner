@@ -5,3 +5,6 @@ __pycache__/
 .DS_Store
 # Quick-check runs (--reps 200). The full run's outputs in results/ are committed.
 results/quick.csv
+
+# Downloaded data (never committed)
+data/
