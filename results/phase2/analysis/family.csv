@@ -1,0 +1,25 @@
+judge,family,group,pair,family_model,pairs,items,self_minus_others_points,self_minus_others_low,self_minus_others_high,judge_minus_humans_points,judge_minus_humans_low,judge_minus_humans_high
+qwen3-8b,qwen,clear,amazon.nova-pro-v1:0 vs qwen3-235b-a22b-no-thinking,qwen3-235b-a22b-no-thinking,1,20,-7.5,-18.38,3.38,7.5,-15.62,30.62
+qwen3-8b,qwen,clear,claude-sonnet-4-20250514 vs qwen3-235b-a22b-no-thinking,qwen3-235b-a22b-no-thinking,1,20,10.0,-3.25,23.25,37.5,16.19,58.81
+qwen3-8b,qwen,clear,claude-sonnet-4-20250514-thinking-32k vs qwen3-235b-a22b-no-thinking,qwen3-235b-a22b-no-thinking,1,20,3.33,-12.99,19.66,-10.0,-30.93,10.93
+qwen3-8b,qwen,clear,command-a-03-2025 vs qwen3-235b-a22b-no-thinking,qwen3-235b-a22b-no-thinking,1,20,0.0,-17.16,17.16,10.0,-15.86,35.86
+qwen3-8b,qwen,close,deepseek-v3-0324 vs qwen3-235b-a22b-no-thinking,qwen3-235b-a22b-no-thinking,1,80,2.29,-5.19,9.77,5.0,-8.32,18.32
+qwen3-8b,qwen,close,gpt-4.1-2025-04-14 vs qwen3-235b-a22b-no-thinking,qwen3-235b-a22b-no-thinking,1,80,3.75,-5.6,13.1,13.12,-0.21,26.46
+qwen3-8b,qwen,close,llama-4-maverick-03-26-experimental vs qwen3-235b-a22b-no-thinking,qwen3-235b-a22b-no-thinking,1,80,-5.94,-16.67,4.8,-5.0,-20.09,10.09
+qwen3-8b,qwen,close,mistral-medium-2505 vs qwen3-235b-a22b-no-thinking,qwen3-235b-a22b-no-thinking,1,80,6.46,-2.48,15.4,17.5,5.61,29.39
+qwen3-8b,qwen,all,all,qwen,8,400,1.6,-2.28,5.49,8.38,2.58,14.17
+gemma-4-31b,google,clear,claude-3-7-sonnet-20250219 vs gemini-2.0-flash-001,gemini-2.0-flash-001,1,20,-9.17,-23.81,5.48,10.0,-13.52,33.52
+gemma-4-31b,google,clear,claude-3-7-sonnet-20250219 vs gemini-2.5-flash,gemini-2.5-flash,1,20,1.67,-8.1,11.44,17.5,1.8,33.2
+gemma-4-31b,google,clear,claude-3-7-sonnet-20250219 vs gemini-2.5-pro,gemini-2.5-pro,1,20,9.17,-3.09,21.43,27.5,8.18,46.82
+gemma-4-31b,google,clear,command-a-03-2025 vs gemini-2.5-pro,gemini-2.5-pro,1,20,11.67,4.92,18.41,20.0,4.07,35.93
+gemma-4-31b,google,clear,gemini-2.5-pro vs mistral-medium-2505,gemini-2.5-pro,1,20,7.5,-3.08,18.08,32.5,15.06,49.94
+gemma-4-31b,google,close,chatgpt-4o-latest-20250326 vs gemini-2.5-flash,gemini-2.5-flash,1,80,0.63,-8.92,10.17,4.38,-7.79,16.54
+gemma-4-31b,google,close,deepseek-r1-0528 vs gemini-2.5-flash,gemini-2.5-flash,1,80,0.21,-7.94,8.35,-17.5,-29.39,-5.61
+gemma-4-31b,google,close,gemini-2.5-flash vs llama-4-maverick-03-26-experimental,gemini-2.5-flash,1,80,8.54,-0.17,17.25,20.62,8.27,32.98
+gemma-4-31b,google,close,gemini-2.5-flash vs o3-2025-04-16,gemini-2.5-flash,1,80,-2.71,-11.13,5.71,-11.88,-24.55,0.8
+gemma-4-31b,google,all,all,google,9,420,2.26,-1.21,5.74,4.29,-0.91,9.48
+mistral-large-4,mistral,clear,claude-3-7-sonnet-20250219 vs mistral-medium-2505,mistral-medium-2505,1,20,-23.33,-41.83,-4.84,-5.0,-32.27,22.27
+mistral-large-4,mistral,clear,gemini-2.5-pro vs mistral-medium-2505,mistral-medium-2505,1,20,-14.17,-25.56,-2.77,-37.5,-55.9,-19.1
+mistral-large-4,mistral,close,gpt-4.1-2025-04-14 vs mistral-medium-2505,mistral-medium-2505,1,80,-6.46,-15.69,2.77,-7.5,-20.64,5.64
+mistral-large-4,mistral,close,mistral-medium-2505 vs qwen3-235b-a22b-no-thinking,mistral-medium-2505,1,80,8.54,-0.15,17.23,-6.25,-20.12,7.62
+mistral-large-4,mistral,all,all,mistral,4,200,-2.92,-8.51,2.67,-9.75,-17.98,-1.52

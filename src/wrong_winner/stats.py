@@ -10,6 +10,7 @@ from __future__ import annotations
 import math
 from collections import Counter
 from dataclasses import dataclass
+from functools import lru_cache
 from statistics import NormalDist, StatisticsError, correlation, fmean
 from typing import Hashable, Optional, Sequence
 
@@ -19,6 +20,71 @@ def z_value(confidence: float = 0.95) -> float:
     if not 0 < confidence < 1:
         raise ValueError("confidence must be between 0 and 1")
     return NormalDist().inv_cdf(0.5 + confidence / 2)
+
+
+def _beta_cf(a: float, b: float, x: float) -> float:
+    """Continued fraction for the incomplete beta function (modified Lentz)."""
+    tiny = 1e-300
+    c, d = 1.0, 1.0 - (a + b) * x / (a + 1)
+    d = 1.0 / (d if abs(d) > tiny else tiny)
+    h = d
+    for m in range(1, 300):
+        for num in (
+            m * (b - m) * x / ((a + 2 * m - 1) * (a + 2 * m)),
+            -(a + m) * (a + b + m) * x / ((a + 2 * m) * (a + 2 * m + 1)),
+        ):
+            d = 1.0 + num * d
+            d = 1.0 / (d if abs(d) > tiny else tiny)
+            c = 1.0 + num / c
+            c = c if abs(c) > tiny else tiny
+            h *= c * d
+        if abs(c * d - 1.0) < 1e-15:
+            break
+    return h
+
+
+def _beta_inc(a: float, b: float, x: float) -> float:
+    """Regularised incomplete beta function I_x(a, b)."""
+    if x <= 0:
+        return 0.0
+    if x >= 1:
+        return 1.0
+    front = math.exp(
+        math.lgamma(a + b) - math.lgamma(a) - math.lgamma(b) + a * math.log(x) + b * math.log1p(-x)
+    )
+    if x < (a + 1) / (a + b + 2):
+        return front * _beta_cf(a, b, x) / a
+    return 1.0 - front * _beta_cf(b, a, 1.0 - x) / b
+
+
+def t_cdf(t: float, df: float) -> float:
+    """CDF of Student's t distribution."""
+    tail = 0.5 * _beta_inc(df / 2, 0.5, df / (df + t * t))
+    return 1.0 - tail if t > 0 else tail
+
+
+@lru_cache(maxsize=None)
+def t_value(confidence: float = 0.95, df: int = 1) -> float:
+    """Two-sided Student's t critical value, e.g. 2.262 for 95% with 9 degrees of freedom."""
+    if not 0 < confidence < 1:
+        raise ValueError("confidence must be between 0 and 1")
+    if df < 1:
+        raise ValueError("df must be at least 1")
+    target = 0.5 + confidence / 2
+    lo, hi = 0.0, 1.0
+    while t_cdf(hi, df) < target:
+        hi *= 2
+    for _ in range(200):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if t_cdf(mid, df) < target else (lo, mid)
+        if hi - lo < 1e-12:
+            break
+    return (lo + hi) / 2
+
+
+def critical_value(confidence: float, n: int, t: bool) -> float:
+    """t value with n - 1 degrees of freedom when `t` is set (and n >= 2), else z."""
+    return t_value(confidence, n - 1) if t and n >= 2 else z_value(confidence)
 
 
 @dataclass(frozen=True)
@@ -41,16 +107,18 @@ def _sample_variance(xs: Sequence[float]) -> float:
     return sum((x - m) ** 2 for x in xs) / (n - 1)
 
 
-def mean_ci(scores: Sequence[float], confidence: float = 0.95) -> Estimate:
+def mean_ci(scores: Sequence[float], confidence: float = 0.95, t: bool = False) -> Estimate:
     """Mean with a CLT interval (Miller 2024, 'Adding Error Bars to Evals').
 
-    Works for binary scores and for pairwise scores with ties (0.5).
+    Works for binary scores and for pairwise scores with ties (0.5). With `t`,
+    the critical value comes from Student's t with n - 1 degrees of freedom,
+    which is wider for small n (Phase 1 found the normal one slightly too narrow at n = 10).
     """
     n = len(scores)
     if n == 0:
         raise ValueError("need at least one score")
     m = fmean(scores)
-    half = z_value(confidence) * math.sqrt(_sample_variance(scores) / n)
+    half = critical_value(confidence, n, t) * math.sqrt(_sample_variance(scores) / n)
     return Estimate(m, m - half, m + half)
 
 
@@ -172,6 +240,7 @@ def ppi_mean(
     judge_labelled: Sequence[float],
     human_labelled: Sequence[float],
     confidence: float = 0.95,
+    t: bool = False,
 ) -> Estimate:
     """Prediction-powered estimate of the human mean (Angelopoulos et al., 2023).
 
@@ -179,6 +248,9 @@ def ppi_mean(
 
     The second term (the "rectifier") removes the judge's average bias using
     the items that humans also labelled. The interval adds both variances.
+    With `t`, the critical value is Student's t with k - 1 degrees of freedom
+    (k = human labels), a conservative choice since the rectifier's variance
+    dominates when k is small.
     """
     if len(judge_labelled) != len(human_labelled):
         raise ValueError("judge_labelled and human_labelled must be the same length")
@@ -195,7 +267,7 @@ def ppi_mean(
         base = fmean(judge_labelled)
         var += _sample_variance(judge_labelled) / n_lab
     value = base + rectifier
-    half = z_value(confidence) * math.sqrt(var)
+    half = critical_value(confidence, n_lab, t) * math.sqrt(var)
     return Estimate(value, value - half, value + half)
 
 

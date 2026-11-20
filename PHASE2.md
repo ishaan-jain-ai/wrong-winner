@@ -2,8 +2,9 @@
 
 **Status:** step 1 done on 17 Nov 2026: 40 pairs chosen, see [Step 1 results](#step-1-results-17-nov-2026).
 On 18 Nov Phase 2 switched to a [lean design](#lean-design-18-nov): about 1,500 calls per judge
-and five free judges from 8B to about 1 trillion parameters, so it costs nothing. The local
-judge's run started on 18 Nov; the hosted judges wait for their API keys.
+and free judges from 8B to about 1 trillion parameters, so it costs nothing. **Four judges
+finished between 18 and 20 Nov** (see [Judge runs](#judge-runs-1820-nov)); the optional Gemini
+judge hasn't run (no key yet). Analysis started on 20 Nov.
 Phase 1 results: [FINDINGS.md](FINDINGS.md).
 
 ## Why Phase 2
@@ -148,7 +149,8 @@ run into the plan's usage limits, so the judges are free models:
   API. Nemotron honours it (8 output tokens per verdict); Gemma 4 doesn't think anyway.
   **Mistral Large 4 reasons on every call** on NVIDIA's endpoint (500–1,000 reasoning tokens;
   `reasoning_effort: "none"` is refused and `"low"` still reasons), so it is the one reasoning
-  judge and is labelled that way in every result. Its output limit is 4,096 tokens to leave room.
+  judge and is labelled that way in every result. Its output limit is 4,096 tokens to leave room
+  (raised later for the calls that needed more; see [Judge runs](#judge-runs-1820-nov)).
   NVIDIA's docs don't mention JSON schemas, so replies are read leniently (JSON, a code fence,
   or a bare A / B / tie, after any reasoning); unreadable replies are retried on the next run.
 - Gemini: thinking at its minimum (Flash-Lite can't switch it off fully), default temperature,
@@ -183,6 +185,102 @@ run into the plan's usage limits, so the judges are free models:
 Pilot (20 local calls) and 5-call tests per NVIDIA judge: every verdict readable, except Mistral
 replies cut off at the first test's 1,024-token limit (now 4,096).
 
+## Judge runs (18–20 Nov)
+
+| Judge | Readable verdicts (of 1,500) | Missing |
+|---|---|---|
+| Qwen3 8B | 1,500 (plus 15 pilot calls, not used) | 0 |
+| Gemma 4 31B | 1,498 | 2 |
+| Nemotron 3 Ultra 550B | 1,500 | 0 |
+| Mistral Large 4 (reasoning) | 1,497 | 3 |
+| Gemini 3.5 Flash-Lite | Not run (no key yet) | |
+
+- **NVIDIA's free tier stopped runs with streaks of 429 errors** (rate limited after 8 retries).
+  Rerunning straight away worked; waiting an hour wasn't needed.
+- **Mistral Large 4 sometimes reasons far longer than 4,096 tokens.** 25 calls needed more (up to
+  14,521). Non-streamed replies that long never arrive from NVIDIA's free tier: the connection
+  times out or is dropped. Two runner options fixed it (19–20 Nov): `--max-tokens` raises the
+  limit and scales the timeout, and `--stream` asks for a streamed reply, which does arrive.
+  Mistral's last 5 calls ran with `--max-tokens 32768 --stream`: 2 returned a verdict (after
+  17,474 and 23,350 tokens); **3 used all 32,768 tokens without deciding** and are recorded as
+  no verdict. All 3 are close pairs that people rated a tie.
+- **The Mac sleeps with the lid closed,** even with the runner's "don't sleep" request, which
+  slowed the overnight run. Keep the lid open during long runs.
+- Missing verdicts are left out of that judge's analysis (each judge's pair then has 79 or 19
+  items instead of 80 or 20), not counted as ties.
+
+## First results (20 Nov)
+
+Run: `python -m wrong_winner.run_phase2` (2,000 repetitions, seed 0, about 3 minutes). Outputs in
+[`results/phase2/analysis/`](results/phase2/analysis/). Main truth: Bradley-Terry. Every result
+below also holds with the pair's own votes as the truth.
+
+**How the analysis is set up**
+- Each item is scored once, in its planned answer order, as a team making one call per item would.
+  The 100 items shown both ways feed RQ9 only.
+- All intervals use Student's t.
+- **The real eval is 80 items** (every judged item of a close pair). Simulated evals of 200 items
+  have to resample those 80, which treats them as the whole population and inflates confident
+  calls: even humans-only evals then back an unsupported winner on 27% of runs. So the headline
+  uses 80 items, and n = 200 is reported only as an extrapolation.
+
+**Close pairs (15): judges invent winners; humans don't**
+
+| Judge | Pairs where the 80-item call isn't backed by humans | Simulated 80-item evals making such a call | PPI, k = 10 / 25 / 50 human labels | Correction reused from another pair (k = 50) |
+|---|---|---|---|---|
+| Qwen3 8B | 7 of 15 | 46.4% | 4.8% / 5.4% / 6.2% | 33.7% |
+| Gemma 4 31B | 5 of 15 | 41.5% | 4.9% / 5.5% / 6.0% | 32.0% |
+| Nemotron 3 Ultra 550B | 6 of 15 | 43.3% | 4.7% / 5.2% / 5.9% | 38.1% |
+| Mistral Large 4 (reasoning) | 5 of 15 | 38.3% | 4.7% / 5.4% / 5.9% | 23.9% |
+| Humans only (the same 80 votes) | 0 of 15 | 14.2% | | |
+
+(The PPI and reused-correction columns are simulated evals of 80 items.)
+
+- **No judge ever picked the opposite winner** to a pair humans can separate. Every unsupported
+  call is a winner invented on a pair people see as a tie, as in Phase 1.
+- **Judges amplify:** on close pairs the judges' win rates sit 10-13 points from a tie on average.
+  Bradley-Terry puts humans 1.5 points from a tie, and the same 80 votes 4.2 points.
+- **The judges agree with each other, not with people.** All four call o3 over ChatGPT-4o,
+  Grok 3 over ChatGPT-4o, and DeepSeek R1 over Gemini 2.5 Flash; people see ties. A panel of
+  these judges would make the same call. Item-level agreement with the single human vote is
+  close to chance (Cohen's kappa 0.05-0.13).
+- **PPI brings unsupported calls down to the nominal 5%, but mostly by saying "can't tell"**
+  (about 93-95% of evals make no call, which is the right answer on a tie). Because the judges barely
+  agree with the voters item by item, the correction adds noise. On clear pairs, PPI with k human
+  labels finds the winner *less* often than those k labels on their own (k = 50: 54-61% against
+  75%; simulated 80-item evals resampled from 20 items).
+- **A correction measured on another pair doesn't transfer** (24-38% unsupported), as in Phase 1.
+
+**Clear pairs (10, control):** every judge's 20-item win rate is on the humans' side for all
+10 pairs. Calls on all 20 items: 8-10 correct, none wrong.
+
+**RQ8 judge size:** no clear trend from 8B to about 1T (7, 5, 6 and 5 of 15 close pairs). The
+reasoning judge is lowest in the simulated evals (38%), but that is one judge.
+
+**RQ9 position bias** (100 close items shown both ways): judges change their verdict when the
+answers swap on **26-51%** of items (GPT-4 on MT-Bench in 2023: 16%, though that was over all
+pairs, not close ones). Mostly toward the first answer: Nemotron chose the first answer both
+times on 41 of 100 items. Over all calls, the first answer wins 58.5-68.5% of decisive verdicts.
+
+| Judge | Verdict changes on swap | First answer both times | Second answer both times | One tie | First answer wins (decisive calls) |
+|---|---|---|---|---|---|
+| Qwen3 8B | 51 of 100 | 25 | 4 | 22 | 66.5% |
+| Gemma 4 31B | 26 of 100 | 13 | 1 | 12 | 58.5% |
+| Nemotron 3 Ultra | 45 of 100 | 41 | 0 | 4 | 68.5% |
+| Mistral Large 4 | 36 of 100 | 32 | 1 | 3 | 61.8% |
+
+**RQ7 same-family preference (exploratory):** no judge favours its own family's models more than
+the other judges do. Points toward the family model, compared with the other judges on the same
+items (95% interval): Qwen +1.6 [-2.3, +5.5] over 8 pairs, Gemma +2.3 [-1.2, +5.7] over 9 pairs,
+Mistral -2.9 [-8.5, +2.7] over 4 pairs. Qwen3 8B does rate Qwen models 8.4 points above the
+voters, but the other judges do much the same.
+
+**Still to do:**
+- figures (needs matplotlib, not installed yet);
+- leave-one-model-out check: qwen3-235b is in 8 of the 25 judged pairs;
+- the Phase 2 findings write-up;
+- optional Gemini judge.
+
 If a Claude data point is ever wanted, the lean design makes it cheap: about $0.15 for Claude
 Haiku 5.5 and about $3 for Sonnet 5.5 through the Batch API. Optional.
 
@@ -208,11 +306,16 @@ Headline metric: **share of close pairs where a judge-only 200-item eval confide
    Mac, NVIDIA's and Google's free tiers), standard library only for HTTP. It runs calls in
    parallel workers with shared pacing, saves each verdict as it arrives, retries unreadable
    ones on the next run, logs tokens, and stops cleanly at a daily limit. `arena.fetch_texts`
-   gets the prompts and answers for the chosen votes (18 Nov).
-4. `stats.py`: t-based interval for small k (Phase 1 showed the normal interval is slightly too narrow at k = 10).
-5. `run_phase2.py`: simulation grid and results CSVs from the saved verdicts.
+   gets the prompts and answers for the chosen votes (18 Nov). NVIDIA-only `--max-tokens` and
+   `--stream` options for long reasoning replies (20 Nov).
+4. ✅ `stats.py`: t-based interval for small k (Phase 1 showed the normal interval is slightly too
+   narrow at k = 10). Standard library only; `mean_ci(..., t=True)` and `ppi_mean(..., t=True)`.
+   Phase 1 keeps the normal interval, and its results are unchanged (checked byte for byte, 20 Nov).
+5. ✅ `run_phase2.py`: full-data verdicts, simulation grid, RQ7 and RQ9, and a summary, written to
+   `results/phase2/analysis/` (20 Nov). `simulate.py` now separates running the evals
+   (`simulate_decisions`) from scoring them (`tally`), so each run is scored against both truths.
 6. ✅ Tests with fake judges and canned responses, so tests make no network calls
-   (`tests/test_judge.py`, 29 tests).
+   (94 tests in all on 20 Nov).
 
 ## Timeline
 
@@ -220,6 +323,8 @@ Headline metric: **share of close pairs where a judge-only 200-item eval confide
 |---|---|
 | 17 Nov ✅ | Exact pair counts, Bradley–Terry truth, pair selection |
 | 18 Nov ✅ | Free judges, lean plan, runner and tests; prompts and answers fetched (692 MB read); local pilot; local and NVIDIA runs started |
+| 18–20 Nov ✅ | Qwen, Gemma and Nemotron finished on 18 Nov; Mistral on 20 Nov after streaming was added |
+| 20 Nov ✅ | Analysis code and first results (see [First results](#first-results-20-nov)) |
 | 19–21 Nov | Gemini about 500 calls a day, once its key is set (optional) |
 | 21–24 Nov | Simulation grid, analysis, RQ7–RQ9, figures |
 | 25–27 Nov | Blog post + cheat sheet |

@@ -8,6 +8,7 @@ several human scores and one or more judge scores, all from A's point of view
 from __future__ import annotations
 
 import random
+from collections import Counter
 from dataclasses import dataclass, field
 from statistics import fmean
 from typing import Dict, Hashable, Iterable, List, Optional
@@ -57,21 +58,22 @@ def _one_eval(
     rng: random.Random,
     confidence: float,
     transport_source: Optional[PairData],
+    t: bool = False,
 ) -> Estimate:
     sample = rng.choices(pool, k=n)
     judge_scores = [rng.choice(pair.judge[item]) for item in sample]
 
     if method == "judge":
-        return mean_ci(judge_scores, confidence)
+        return mean_ci(judge_scores, confidence, t)
 
     # One random human (one annotator) per labelled item, as a real team would have.
     human_scores = [rng.choice(pair.human[item]) for item in sample[:k]]
 
     if method == "human_only":
-        return mean_ci(human_scores, confidence)
+        return mean_ci(human_scores, confidence, t)
 
     if method == "ppi":
-        return ppi_mean(judge_scores[k:], judge_scores[:k], human_scores, confidence)
+        return ppi_mean(judge_scores[k:], judge_scores[:k], human_scores, confidence, t)
 
     if method == "transport":
         # Correction measured on a *different* pair, then reused here.
@@ -80,9 +82,66 @@ def _one_eval(
         src_items = rng.choices(src_pool, k=k)
         src_judge = [rng.choice(transport_source.judge[i]) for i in src_items]
         src_human = [rng.choice(transport_source.human[i]) for i in src_items]
-        return ppi_mean(judge_scores, src_judge, src_human, confidence)
+        return ppi_mean(judge_scores, src_judge, src_human, confidence, t)
 
     raise ValueError(f"unknown method: {method!r}")
+
+
+def simulate_decisions(
+    pair: PairData,
+    n: int,
+    method: str = "judge",
+    k: int = 0,
+    rule: str = "significant",
+    reps: int = 2000,
+    seed: int = 0,
+    confidence: float = 0.95,
+    transport_source: Optional[PairData] = None,
+    t: bool = False,
+) -> Counter:
+    """Run `reps` simulated evals of size n; count the decisions ("A", "B", None).
+
+    Same methods as `simulate_pair`. With `t`, intervals use Student's t.
+    """
+    if method not in METHODS:
+        raise ValueError(f"method must be one of {METHODS}")
+    if method in ("human_only", "ppi", "transport") and k < 2:
+        raise ValueError(f"method {method!r} needs k >= 2 human labels")
+    if method in ("human_only", "ppi") and k > n:
+        raise ValueError("k cannot exceed n")
+    if method == "transport" and transport_source is None:
+        raise ValueError("method 'transport' needs transport_source")
+
+    pool = pair.shared_items()
+    if not pool:
+        raise ValueError(f"{pair.name}: no items with both human and judge scores")
+    rng = random.Random(seed)
+    decisions: Counter = Counter()
+    for _ in range(reps):
+        est = _one_eval(pair, pool, n, k, method, rng, confidence, transport_source, t)
+        decisions[decide(est, rule)] += 1
+    return decisions
+
+
+def tally(decisions: Counter, truth_winner: Optional[str]) -> Dict[str, float]:
+    """Score decision counts against a truth ("A", "B", or None when too close to call).
+
+    correct: the human winner. wrong: the opposite winner. overclaim: a confident
+    call on a pair humans can't separate. no_decision: the interval includes a tie.
+    """
+    reps = sum(decisions.values())
+    if reps == 0:
+        raise ValueError("no decisions to tally")
+    calls = {"A": decisions.get("A", 0), "B": decisions.get("B", 0)}
+    out = {"correct": 0, "wrong": 0, "overclaim": 0, "no_decision": decisions.get(None, 0)}
+    for side, count in calls.items():
+        if truth_winner is None:
+            out["overclaim"] += count
+        elif side == truth_winner:
+            out["correct"] += count
+        else:
+            out["wrong"] += count
+    return {f"{key}_rate": value / reps for key, value in out.items()}
 
 
 def simulate_pair(
@@ -107,36 +166,11 @@ def simulate_pair(
       - "transport":  judge on n items, correction measured on k items of
                       `transport_source` (a different pair).
     """
-    if method not in METHODS:
-        raise ValueError(f"method must be one of {METHODS}")
-    if method in ("human_only", "ppi", "transport") and k < 2:
-        raise ValueError(f"method {method!r} needs k >= 2 human labels")
-    if method in ("human_only", "ppi") and k > n:
-        raise ValueError("k cannot exceed n")
-    if method == "transport" and transport_source is None:
-        raise ValueError("method 'transport' needs transport_source")
-
-    pool = pair.shared_items()
-    if not pool:
-        raise ValueError(f"{pair.name}: no items with both human and judge scores")
+    decisions = simulate_decisions(
+        pair, n, method, k, rule, reps, seed, confidence, transport_source
+    )
     truth = truth or ground_truth(pair, confidence)
-    rng = random.Random(seed)
-
-    tally = {"correct": 0, "wrong": 0, "overclaim": 0, "no_decision": 0}
-    for _ in range(reps):
-        est = _one_eval(pair, pool, n, k, method, rng, confidence, transport_source)
-        d = decide(est, rule)
-        if d is None:
-            tally["no_decision"] += 1
-        elif truth.winner is None:
-            # A confident call on a pair humans cannot separate.
-            tally["overclaim"] += 1
-        elif d == truth.winner:
-            tally["correct"] += 1
-        else:
-            # The opposite winner to the human verdict.
-            tally["wrong"] += 1
-
+    rates = tally(decisions, truth.winner)
     return {
         "pair": pair.name,
         "truth": truth.winner or "too_close",
@@ -146,10 +180,7 @@ def simulate_pair(
         "method": method,
         "rule": rule,
         "reps": reps,
-        "correct_rate": tally["correct"] / reps,
-        "wrong_rate": tally["wrong"] / reps,
-        "overclaim_rate": tally["overclaim"] / reps,
-        "no_decision_rate": tally["no_decision"] / reps,
+        **{key: rates[key] for key in ("correct_rate", "wrong_rate", "overclaim_rate", "no_decision_rate")},
     }
 
 
