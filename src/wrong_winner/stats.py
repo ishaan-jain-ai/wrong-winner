@@ -241,13 +241,16 @@ def ppi_mean(
     human_labelled: Sequence[float],
     confidence: float = 0.95,
     t: bool = False,
+    lam: float = 1.0,
 ) -> Estimate:
     """Prediction-powered estimate of the human mean (Angelopoulos et al., 2023).
 
-    estimate = mean(judge on unlabelled) + mean(human - judge on labelled)
+    estimate = lam * mean(judge on unlabelled) + mean(human - lam * judge on labelled)
 
     The second term (the "rectifier") removes the judge's average bias using
     the items that humans also labelled. The interval adds both variances.
+    lam = 1 is plain PPI; lam = 0 ignores the judge and is the human-only mean;
+    `ppi_lambda` picks the lam with the narrowest interval (PPI++).
     With `t`, the critical value is Student's t with k - 1 degrees of freedom
     (k = human labels), a conservative choice since the rectifier's variance
     dominates when k is small.
@@ -257,18 +260,46 @@ def ppi_mean(
     n_lab = len(human_labelled)
     if n_lab == 0:
         raise ValueError("need at least one human-labelled item")
-    gaps = [h - j for h, j in zip(human_labelled, judge_labelled)]
+    gaps = [h - lam * j for h, j in zip(human_labelled, judge_labelled)]
     rectifier = fmean(gaps)
     var = _sample_variance(gaps) / n_lab
     if judge_unlabelled:
-        base = fmean(judge_unlabelled)
-        var += _sample_variance(judge_unlabelled) / len(judge_unlabelled)
+        base = lam * fmean(judge_unlabelled)
+        var += lam * lam * _sample_variance(judge_unlabelled) / len(judge_unlabelled)
     else:
-        base = fmean(judge_labelled)
-        var += _sample_variance(judge_labelled) / n_lab
+        base = lam * fmean(judge_labelled)
+        var += lam * lam * _sample_variance(judge_labelled) / n_lab
     value = base + rectifier
     half = critical_value(confidence, n_lab, t) * math.sqrt(var)
     return Estimate(value, value - half, value + half)
+
+
+def ppi_lambda(
+    judge_unlabelled: Sequence[float],
+    judge_labelled: Sequence[float],
+    human_labelled: Sequence[float],
+) -> float:
+    """Power-tuned weight on the judge for `ppi_mean` (PPI++, Angelopoulos, Duchi and Zrnic, 2023).
+
+    lam = Cov(human, judge) / ((1 + k / N) * Var(judge))
+
+    with the covariance from the k labelled items and the judge's variance from
+    all k + N items. This minimises the estimate's variance, so a judge that
+    barely tracks the humans gets a weight near 0 and the estimate falls back to
+    the human labels alone. Clipped to [0, 1]: 0 is humans only, 1 is plain PPI.
+    """
+    if len(judge_labelled) != len(human_labelled):
+        raise ValueError("judge_labelled and human_labelled must be the same length")
+    k, n_unlab = len(human_labelled), len(judge_unlabelled)
+    if k < 2 or n_unlab == 0:
+        return 0.0
+    var_judge = _sample_variance(list(judge_labelled) + list(judge_unlabelled))
+    if var_judge == 0:
+        return 0.0
+    mh, mj = fmean(human_labelled), fmean(judge_labelled)
+    cov = sum((h - mh) * (j - mj) for h, j in zip(human_labelled, judge_labelled)) / (k - 1)
+    lam = cov / ((1 + k / n_unlab) * var_judge)
+    return min(1.0, max(0.0, lam))
 
 
 # ---------------------------------------------------------------------------

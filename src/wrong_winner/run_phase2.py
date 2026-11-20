@@ -34,7 +34,7 @@ from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 from .judge import JUDGMENTS_DIR, PLAN_CSV, Item, load_done, orders_for, read_plan, verdict_score
 from .simulate import PairData, agreement, score_label, simulate_decisions, tally
-from .stats import Estimate, cohen_kappa, decide, mean_ci, wilson_interval
+from .stats import Estimate, _sample_variance, cohen_kappa, decide, mean_ci, wilson_interval
 
 PAIRS_CSV = Path("results/phase2/pairs.csv")
 OUT_DIR = Path("results/phase2/analysis")
@@ -209,8 +209,10 @@ def verdict_rows(judge: str, pairs: Dict[PairKey, PairInfo], data: Dict[PairKey,
         items = pd.shared_items()
         if len(items) < 2:
             continue
-        j = mean_ci([pd.judge[i][0] for i in items], t=True)
-        h = mean_ci([pd.human[i][0] for i in items], t=True)
+        judge_scores = [pd.judge[i][0] for i in items]
+        human_scores = [pd.human[i][0] for i in items]
+        j = mean_ci(judge_scores, t=True)
+        h = mean_ci(human_scores, t=True)
         call = decide(j)
         agree = agreement(pd)
         rows.append({
@@ -236,8 +238,21 @@ def verdict_rows(judge: str, pairs: Dict[PairKey, PairInfo], data: Dict[PairKey,
             "same_side": (j.value - 0.5) * (p.bt.value - 0.5) > 0,
             "raw_agreement": round(agree["raw_agreement"], 4),
             "kappa": round(agree["kappa"], 4),
+            "best_judge_weight": round(best_judge_weight(human_scores, judge_scores), 4),
         })
     return rows
+
+
+def best_judge_weight(human: Sequence[float], judge: Sequence[float]) -> float:
+    """PPI++'s weight on the judge when the judge has scored many more items than humans:
+    Cov(human, judge) / Var(judge), the slope of human score on judge score. Not clipped,
+    so a negative value shows a judge that leans against the voters."""
+    var_judge = _sample_variance(judge)
+    if var_judge == 0:
+        return 0.0
+    mh, mj = fmean(human), fmean(judge)
+    cov = sum((h - mh) * (j - mj) for h, j in zip(human, judge)) / (len(human) - 1)
+    return cov / var_judge
 
 
 # ---------------------------------------------------------------------------
@@ -252,6 +267,7 @@ def judge_configs() -> Iterable[dict]:
         for k in K_GRID:
             if k < n:
                 yield {"method": "ppi", "n": n, "k": k, "rule": "significant"}
+                yield {"method": "ppi_tuned", "n": n, "k": k, "rule": "significant"}
     for n, k in TRANSPORT:
         yield {"method": "transport", "n": n, "k": k, "rule": "significant"}
 
@@ -524,18 +540,24 @@ def summary_rows(
             row[f"close_pairs_majority_unsupported_n{n}"] = _majority(grid, key, method, n, k)
         if info:
             for n in (80, 200):
-                for k in K_GRID:
-                    u = _grid_mean_unsupported(grid, key, "ppi", n, k)
-                    row[f"close_unsupported_ppi_n{n}_k{k}"] = round(u, 4) if u is not None else ""
+                for method in ("ppi", "ppi_tuned"):
+                    for k in K_GRID:
+                        u = _grid_mean_unsupported(grid, key, method, n, k)
+                        row[f"close_unsupported_{method}_n{n}_k{k}"] = round(u, 4) if u is not None else ""
                 for n_t, k_t in TRANSPORT:
                     if n_t == n:
                         u = _grid_mean_unsupported(grid, key, "transport", n, k_t)
                         row[f"close_unsupported_transport_n{n}_k{k_t}"] = round(u, 4) if u is not None else ""
             # Power check: does a corrected eval still find the winner on clear pairs?
-            for n, k in ((80, 0), (80, 10), (80, 25), (80, 50)):
-                method = "judge" if k == 0 else "ppi"
-                c = _grid_mean(grid, key, "clear", method, n, k, "significant", "correct_bt")
-                row[f"clear_correct_{method}_n{n}" + (f"_k{k}" if k else "")] = round(c, 4) if c is not None else ""
+            c = _grid_mean(grid, key, "clear", "judge", 80, 0, "significant", "correct_bt")
+            row["clear_correct_judge_n80"] = round(c, 4) if c is not None else ""
+            for method in ("ppi", "ppi_tuned"):
+                for k in K_GRID:
+                    c = _grid_mean(grid, key, "clear", method, 80, k, "significant", "correct_bt")
+                    row[f"clear_correct_{method}_n80_k{k}"] = round(c, 4) if c is not None else ""
+            # PPI++'s weight on the judge when it scores far more items than humans (1 = full trust).
+            for group, vs in (("close", v_close), ("clear", v_clear)):
+                row[f"{group}_mean_best_judge_weight"] = round(fmean(v["best_judge_weight"] for v in vs), 4) if vs else ""
         else:
             for k in K_GRID:
                 u = _grid_mean_unsupported(grid, key, "human_only", k, k)
@@ -582,40 +604,46 @@ def _pct(x) -> str:
 
 
 def print_summary(summary: List[dict], position: List[dict], fam: List[dict]) -> None:
-    print("\nClose pairs: confident calls humans don't back (main truth: Bradley-Terry)")
-    print(f"  {'judge':22s} {'80 items':>9s} {'sim n=80':>9s} {'n=200*':>8s} "
-          f"{'PPI k=10':>9s} {'k=25':>6s} {'k=50':>6s} {'reused k=50':>12s}")
+    def ks(r: dict, fmt: str) -> str:
+        return " ".join(_pct(r.get(fmt.format(k=k))) for k in K_GRID)
+
+    print("\nClose pairs: confident calls humans don't back (main truth: Bradley-Terry); simulated evals of 80 items")
+    print(f"  {'':22s} {'all items':>9s} {'judge':>6s} {'n=200*':>6s}  {'PPI k=10/25/50':>17s}  "
+          f"{'PPI++ k=10/25/50':>17s}  {'reused k=50':>11s}")
     for r in summary:
         if r["judge"] == HUMANS:
-            print(f"  {'humans only':22s} {r['close_unsupported_all_items_bt']:>3d} of {r['close_pairs']:<3d} "
-                  f"{_pct(r['close_unsupported_n80']):>9s} {_pct(r['close_unsupported_n200']):>8s}   "
-                  f"(humans alone, k=10/25/50: {_pct(r['close_unsupported_k10'])} {_pct(r['close_unsupported_k25'])} "
-                  f"{_pct(r['close_unsupported_k50'])})")
+            print(f"  {'humans only':22s} {r['close_unsupported_all_items_bt']:>2d} of {r['close_pairs']:<3d} "
+                  f"{_pct(r['close_unsupported_n80']):>6s} {_pct(r['close_unsupported_n200']):>6s}  "
+                  f"humans alone, k=10/25/50: {ks(r, 'close_unsupported_k{k}')}")
             continue
         print(
-            f"  {r['label']:22s} {r['close_unsupported_all_items_bt']:>3d} of {r['close_pairs']:<3d} "
-            f"{_pct(r['close_unsupported_n80']):>9s} {_pct(r['close_unsupported_n200']):>8s} "
-            f"{_pct(r.get('close_unsupported_ppi_n200_k10')):>9s} {_pct(r.get('close_unsupported_ppi_n200_k25')):>6s} "
-            f"{_pct(r.get('close_unsupported_ppi_n200_k50')):>6s} {_pct(r.get('close_unsupported_transport_n200_k50')):>12s}"
+            f"  {r['label']:22s} {r['close_unsupported_all_items_bt']:>2d} of {r['close_pairs']:<3d} "
+            f"{_pct(r['close_unsupported_n80']):>6s} {_pct(r['close_unsupported_n200']):>6s}  "
+            f"{ks(r, 'close_unsupported_ppi_n80_k{k}'):>17s}  {ks(r, 'close_unsupported_ppi_tuned_n80_k{k}'):>17s}  "
+            f"{_pct(r.get('close_unsupported_transport_n80_k50')):>11s}"
         )
-    print("  80 items: pairs where the judge's call on all its items isn't backed by humans.")
-    print("  sim: share of simulated evals making such a call, averaged over close pairs.")
-    print("  * n=200 resamples the 80 items, so it treats them as the whole population. PPI columns use n=200.")
+    print("  all items: pairs where the call on all 80 items isn't backed by humans.")
+    print("  Other columns: share of simulated evals making such a call, averaged over close pairs.")
+    print("  * n=200 resamples the 80 items, so it treats them as the whole population.")
 
-    print("\nClear pairs (control): call on all 20 items vs the human winner; "
-          "share of simulated n=80 evals that find it (resampled from 20 items)")
+    print("\nClear pairs (control): call on all 20 items vs the human winner; share of simulated "
+          "80-item evals that find it (resampled from 20 items)")
     for r in summary:
         label = "humans only" if r["judge"] == HUMANS else r["label"]
         line = (f"  {label:22s} correct {r['clear_correct_bt']:2d}, wrong {r['clear_wrong_bt']:2d}, "
                 f"same side {r['clear_same_side']:2d} of {r['clear_pairs']}")
         if r["judge"] != HUMANS:
-            line += (f";  judge {_pct(r['clear_correct_judge_n80'])}, PPI k=10/25/50 "
-                     f"{_pct(r['clear_correct_ppi_n80_k10'])} {_pct(r['clear_correct_ppi_n80_k25'])} "
-                     f"{_pct(r['clear_correct_ppi_n80_k50'])}")
+            line += (f";  judge {_pct(r['clear_correct_judge_n80'])}, PPI {ks(r, 'clear_correct_ppi_n80_k{k}')}, "
+                     f"PPI++ {ks(r, 'clear_correct_ppi_tuned_n80_k{k}')}")
         else:
-            line += (f";  humans alone k=10/25/50 {_pct(r['clear_correct_k10'])} "
-                     f"{_pct(r['clear_correct_k25'])} {_pct(r['clear_correct_k50'])}")
+            line += f";  humans alone k=10/25/50 {ks(r, 'clear_correct_k{k}')}"
         print(line)
+
+    print("\nPPI++ weight on the judge with many unlabelled items (1 = trust fully, 0 = ignore), mean over pairs")
+    for r in summary:
+        if r["judge"] != HUMANS:
+            print(f"  {r['label']:22s} close {r['close_mean_best_judge_weight']:+.2f}, "
+                  f"clear {r['clear_mean_best_judge_weight']:+.2f}")
 
     print("\nRQ9 position bias (100 close items shown both ways)")
     for r in position:

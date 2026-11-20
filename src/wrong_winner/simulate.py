@@ -13,11 +13,12 @@ from dataclasses import dataclass, field
 from statistics import fmean
 from typing import Dict, Hashable, Iterable, List, Optional
 
-from .stats import Estimate, cohen_kappa, decide, mean_ci, pearson_r, ppi_mean
+from .stats import Estimate, cohen_kappa, decide, mean_ci, pearson_r, ppi_lambda, ppi_mean
 
 Item = Hashable
 
-METHODS = ("judge", "human_only", "ppi", "transport")
+METHODS = ("judge", "human_only", "ppi", "ppi_tuned", "transport")
+NEEDS_LABELS = ("human_only", "ppi", "ppi_tuned", "transport")
 
 
 @dataclass
@@ -75,6 +76,11 @@ def _one_eval(
     if method == "ppi":
         return ppi_mean(judge_scores[k:], judge_scores[:k], human_scores, confidence, t)
 
+    if method == "ppi_tuned":
+        # PPI++: the weight on the judge is chosen from this eval's own data.
+        lam = ppi_lambda(judge_scores[k:], judge_scores[:k], human_scores)
+        return ppi_mean(judge_scores[k:], judge_scores[:k], human_scores, confidence, t, lam)
+
     if method == "transport":
         # Correction measured on a *different* pair, then reused here.
         assert transport_source is not None
@@ -105,9 +111,9 @@ def simulate_decisions(
     """
     if method not in METHODS:
         raise ValueError(f"method must be one of {METHODS}")
-    if method in ("human_only", "ppi", "transport") and k < 2:
+    if method in NEEDS_LABELS and k < 2:
         raise ValueError(f"method {method!r} needs k >= 2 human labels")
-    if method in ("human_only", "ppi") and k > n:
+    if method in ("human_only", "ppi", "ppi_tuned") and k > n:
         raise ValueError("k cannot exceed n")
     if method == "transport" and transport_source is None:
         raise ValueError("method 'transport' needs transport_source")
@@ -163,6 +169,7 @@ def simulate_pair(
       - "human_only": one human label on each of k items (set k = n for the
                       pure-sampling-noise baseline).
       - "ppi":        judge on n items, human labels on k of them, PPI correction.
+      - "ppi_tuned":  as "ppi", with the judge's weight tuned from the data (PPI++).
       - "transport":  judge on n items, correction measured on k items of
                       `transport_source` (a different pair).
     """

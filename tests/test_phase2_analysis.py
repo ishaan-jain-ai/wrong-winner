@@ -10,6 +10,7 @@ from wrong_winner.run_phase2 import (
     JUDGES,
     JudgeInfo,
     PairInfo,
+    best_judge_weight,
     build_pairs,
     family,
     family_rows,
@@ -21,7 +22,7 @@ from wrong_winner.run_phase2 import (
     verdict_rows,
 )
 from wrong_winner.simulate import PairData, simulate_decisions, simulate_pair, tally
-from wrong_winner.stats import Estimate, mean_ci, ppi_mean, t_value
+from wrong_winner.stats import Estimate, mean_ci, ppi_lambda, ppi_mean, t_value
 
 
 # ---------------------------------------------------------------------------
@@ -234,3 +235,66 @@ def test_transport_sources_stay_in_group():
 
 def test_humans_label_is_reserved():
     assert HUMANS not in {j.key for j in JUDGES}
+
+
+# ---------------------------------------------------------------------------
+# PPI++ (power-tuned PPI)
+# ---------------------------------------------------------------------------
+
+
+def test_ppi_with_weight_zero_is_the_human_mean():
+    human = [1, 0, 0.5, 1, 1, 0, 1, 0.5]
+    judge = [0, 1, 1, 0, 1, 1, 0.5, 0]
+    for t in (False, True):
+        assert ppi_mean([1, 1, 0], judge, human, t=t, lam=0.0) == mean_ci(human, t=t)
+
+
+def test_ppi_weight_one_is_plain_ppi():
+    args = ([1, 0.5, 0, 1], [1, 0, 1], [1, 1, 0])
+    assert ppi_mean(*args, lam=1.0) == ppi_mean(*args)
+
+
+def test_ppi_lambda_trusts_a_judge_that_tracks_humans():
+    human = [1, 0, 1, 0, 1, 0.5, 0, 1]
+    unlabelled = [1, 0, 0.5, 1] * 20
+    lam = ppi_lambda(unlabelled, human, human)  # judge == humans on the labelled items
+    assert 0.8 < lam <= 1.0  # about 1 / (1 + 8 / 80), from the k / N term
+
+
+def test_ppi_lambda_ignores_a_useless_judge():
+    human = [1, 0, 1, 0, 1, 0, 1, 0]
+    assert ppi_lambda([1, 0] * 20, [1, 1, 0, 0, 1, 1, 0, 0], human) == 0.0  # uncorrelated
+    assert ppi_lambda([0] * 20, [1, 0, 0, 1, 0, 1, 1, 0], human) == 0.0  # anti-correlated: clipped
+    assert ppi_lambda([0.5] * 20, [0.5] * 8, human) == 0.0  # constant judge
+    assert ppi_lambda([], [1, 0] * 4, human) == 0.0  # no unlabelled items
+    with pytest.raises(ValueError):
+        ppi_lambda([1], [1, 0], [1])
+
+
+def test_ppi_tuned_simulation_never_much_worse_than_humans_alone():
+    # A judge with no relation to the humans: PPI++ should fall back to the labels.
+    human = [1, 0, 0.5, 1, 0, 1, 0, 0.5, 1, 1] * 8
+    judge = [0.5, 1, 1, 0, 1, 0, 0.5, 1, 0, 1] * 8
+    pair = _pair(judge, human)
+    plain = simulate_decisions(pair, n=80, k=25, method="ppi", reps=400, seed=2, t=True)
+    tuned = simulate_decisions(pair, n=80, k=25, method="ppi_tuned", reps=400, seed=2, t=True)
+    alone = simulate_decisions(pair, n=25, k=25, method="human_only", reps=400, seed=2, t=True)
+    assert sum(tuned.values()) == 400
+    calls = lambda d: d["A"] + d["B"]  # noqa: E731
+    assert calls(tuned) >= calls(plain)
+    assert abs(calls(tuned) - calls(alone)) <= 40
+
+
+def test_ppi_tuned_needs_labels():
+    pair = _pair([1, 0] * 10, [1, 0] * 10)
+    with pytest.raises(ValueError):
+        simulate_decisions(pair, n=10, k=0, method="ppi_tuned")
+    with pytest.raises(ValueError):
+        simulate_decisions(pair, n=10, k=20, method="ppi_tuned")
+
+
+def test_best_judge_weight():
+    assert best_judge_weight([1, 0, 1, 0], [1, 0, 1, 0]) == pytest.approx(1.0)
+    assert best_judge_weight([1, 0, 1, 0], [0, 1, 0, 1]) == pytest.approx(-1.0)
+    assert best_judge_weight([1, 0, 1, 0], [0.5] * 4) == 0.0
+    assert best_judge_weight([1, 1, 0, 0], [1, 0, 1, 0]) == pytest.approx(0.0)

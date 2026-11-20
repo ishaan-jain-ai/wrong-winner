@@ -226,15 +226,15 @@ below also holds with the pair's own votes as the truth.
 
 **Close pairs (15): judges invent winners; humans don't**
 
-| Judge | Pairs where the 80-item call isn't backed by humans | Simulated 80-item evals making such a call | PPI, k = 10 / 25 / 50 human labels | Correction reused from another pair (k = 50) |
-|---|---|---|---|---|
-| Qwen3 8B | 7 of 15 | 46.4% | 4.8% / 5.4% / 6.2% | 33.7% |
-| Gemma 4 31B | 5 of 15 | 41.5% | 4.9% / 5.5% / 6.0% | 32.0% |
-| Nemotron 3 Ultra 550B | 6 of 15 | 43.3% | 4.7% / 5.2% / 5.9% | 38.1% |
-| Mistral Large 4 (reasoning) | 5 of 15 | 38.3% | 4.7% / 5.4% / 5.9% | 23.9% |
-| Humans only (the same 80 votes) | 0 of 15 | 14.2% | | |
+| Judge | Pairs where the 80-item call isn't backed by humans | Simulated 80-item evals making such a call | PPI, k = 10 / 25 / 50 human labels | PPI++, k = 10 / 25 / 50 | Correction reused from another pair (k = 50) |
+|---|---|---|---|---|---|
+| Qwen3 8B | 7 of 15 | 46.4% | 4.8% / 5.4% / 6.2% | 6.6% / 8.0% / 11.0% | 33.7% |
+| Gemma 4 31B | 5 of 15 | 41.5% | 4.9% / 5.5% / 6.0% | 6.9% / 8.2% / 10.9% | 32.0% |
+| Nemotron 3 Ultra 550B | 6 of 15 | 43.3% | 4.7% / 5.2% / 5.9% | 6.6% / 8.0% / 10.9% | 38.1% |
+| Mistral Large 4 (reasoning) | 5 of 15 | 38.3% | 4.7% / 5.4% / 5.9% | 6.8% / 8.2% / 11.0% | 23.9% |
+| Humans only (the same 80 votes) | 0 of 15 | 14.2% | | The k labels alone: 4.6% / 7.8% / 10.3% | |
 
-(The PPI and reused-correction columns are simulated evals of 80 items.)
+(Every column after the second is from simulated evals of 80 items.)
 
 - **No judge ever picked the opposite winner** to a pair humans can separate. Every unsupported
   call is a winner invented on a pair people see as a tie, as in Phase 1.
@@ -244,11 +244,27 @@ below also holds with the pair's own votes as the truth.
   Grok 3 over ChatGPT-4o, and DeepSeek R1 over Gemini 2.5 Flash; people see ties. A panel of
   these judges would make the same call. Item-level agreement with the single human vote is
   close to chance (Cohen's kappa 0.05-0.13).
-- **PPI brings unsupported calls down to the nominal 5%, but mostly by saying "can't tell"**
+- **Plain PPI brings unsupported calls down to about 5%, but mostly by saying "can't tell"**
   (about 93-95% of evals make no call, which is the right answer on a tie). Because the judges barely
-  agree with the voters item by item, the correction adds noise. On clear pairs, PPI with k human
-  labels finds the winner *less* often than those k labels on their own (k = 50: 54-61% against
-  75%; simulated 80-item evals resampled from 20 items).
+  agree with the voters item by item, the correction adds noise. On clear pairs, plain PPI with k
+  human labels finds the winner *less* often than those k labels on their own (k = 50: 54-61%
+  against 75%; simulated 80-item evals resampled from 20 items).
+- **Power-tuned PPI (PPI++) fixes that, and shows how little the judge adds.** PPI++ weights the
+  judge by how well it tracks the humans (Angelopoulos, Duchi and Zrnic, 2023). With these judges
+  it does as well as the human labels alone, but hardly better:
+  - clear pairs, finding the winner at k = 10 / 25 / 50: 37-40% / 63-65% / 76-77%, against
+    35% / 62% / 75% for the labels alone;
+  - close pairs, unsupported calls: 6.6-6.9% / 8.0-8.2% / 10.9-11.0%, against 4.6% / 7.8% / 10.3%.
+    At k = 10, PPI++ is slightly less cautious than the labels alone, a known cost of estimating
+    the weight from only 10 items.
+
+  The best weight on the judge, given many more judge than human scores, averages **0.06-0.29**
+  (1 = trust the judge fully, 0 = ignore it). On these pairs, the human labels do the work;
+  the judge adds little.
+- **Unsupported calls rise with k for every method that targets the human mean,** including the
+  labels alone (4.6% to 10.3%). That's a property of the simulation, not of PPI: it treats each
+  pair's 80 votes as the population, and for a few close pairs those votes lean further from a
+  tie than the Bradley-Terry truth (claude-sonnet-4 vs command-a: 41% of the 80 votes).
 - **A correction measured on another pair doesn't transfer** (24-38% unsupported), as in Phase 1.
 
 **Clear pairs (10, control):** every judge's 20-item win rate is on the humans' side for all
@@ -311,6 +327,8 @@ Headline metric: **share of close pairs where a judge-only 200-item eval confide
 4. ✅ `stats.py`: t-based interval for small k (Phase 1 showed the normal interval is slightly too
    narrow at k = 10). Standard library only; `mean_ci(..., t=True)` and `ppi_mean(..., t=True)`.
    Phase 1 keeps the normal interval, and its results are unchanged (checked byte for byte, 20 Nov).
+   ✅ Power-tuned PPI (PPI++): `ppi_lambda` picks the weight on the judge and `ppi_mean(..., lam=)`
+   uses it; the simulation's `ppi_tuned` method runs it. Phase 1 still unchanged (20 Nov).
 5. ✅ `run_phase2.py`: full-data verdicts, simulation grid, RQ7 and RQ9, and a summary, written to
    `results/phase2/analysis/` (20 Nov). `simulate.py` now separates running the evals
    (`simulate_decisions`) from scoring them (`tally`), so each run is scored against both truths.
