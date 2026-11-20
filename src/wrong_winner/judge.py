@@ -44,7 +44,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, replace
 from pathlib import Path
 from statistics import fmean
-from typing import Callable, Dict, List, Optional, Sequence, Tuple
+from typing import Callable, Dict, Iterable, List, Optional, Sequence, Tuple
 
 ITEMS_CSV = Path("results/phase2/items.csv")
 PLAN_CSV = Path("results/phase2/plan.csv")
@@ -270,12 +270,68 @@ class CallFailed(RuntimeError):
 
 
 def _post(url: str, body: dict, headers: Dict[str, str], timeout: float) -> Tuple[int, dict]:
+    return _request(url, body, headers, timeout, lambda resp: json.loads(resp.read() or b"{}"))
+
+
+def _post_stream(url: str, body: dict, headers: Dict[str, str], timeout: float) -> Tuple[int, dict]:
+    """Like _post for a streamed reply, joined into one completion. Here `timeout` is
+    the longest silence allowed between pieces, not a limit on the whole reply."""
+    return _request(url, body, headers, timeout, collect_stream)
+
+
+def collect_stream(lines: Iterable[bytes]) -> dict:
+    """Join a streamed OpenAI-style chat completion (server-sent events) into the dict a
+    normal reply would have, so parse_openai reads both the same way.
+
+    Raises ConnectionError if the stream ends before the reply is complete."""
+    content: List[str] = []
+    reasoning: List[str] = []
+    finish, usage, pieces, complete = None, None, 0, False
+    for raw in lines:
+        line = (raw.decode(errors="replace") if isinstance(raw, bytes) else raw).strip()
+        if not line.startswith("data:"):
+            continue
+        payload = line[len("data:"):].strip()
+        if payload == "[DONE]":
+            complete = True
+            break
+        try:
+            event = json.loads(payload)
+        except json.JSONDecodeError:
+            continue
+        if event.get("error"):
+            raise ConnectionError(f"error in stream: {json.dumps(event['error'])[:300]}")
+        if event.get("usage"):
+            usage = event["usage"]
+        for choice in event.get("choices") or []:
+            delta = choice.get("delta") or {}
+            if delta.get("content"):
+                content.append(delta["content"])
+                pieces += 1
+            thought = delta.get("reasoning_content") or delta.get("reasoning")
+            if thought:
+                reasoning.append(thought)
+                pieces += 1
+            if choice.get("finish_reason"):
+                finish, complete = choice["finish_reason"], True
+    if not complete:
+        raise ConnectionError(f"stream ended early after {pieces} pieces")
+    message = {"content": "".join(content)}
+    if reasoning:
+        message["reasoning_content"] = "".join(reasoning)
+    # Without a usage report, each piece is about one token.
+    return {"choices": [{"message": message, "finish_reason": finish}],
+            "usage": usage or {"completion_tokens": pieces}}
+
+
+def _request(url: str, body: dict, headers: Dict[str, str], timeout: float,
+             read: Callable) -> Tuple[int, dict]:
     req = urllib.request.Request(
         url, data=json.dumps(body).encode(), headers={"Content-Type": "application/json", **headers}
     )
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return resp.status, json.loads(resp.read() or b"{}")
+            return resp.status, read(resp)
     except urllib.error.HTTPError as e:
         raw = e.read() or b"{}"
         try:
@@ -441,10 +497,15 @@ class NvidiaJudge(HostedJudge):
     URL = "https://integrate.api.nvidia.com/v1/chat/completions"
     KEY_ENV = "NVIDIA_API_KEY"
 
-    def __init__(self, model: str, max_tokens: int = 4096, timeout: float = 900, **kwargs):
+    def __init__(self, model: str, max_tokens: int = 4096, timeout: float = 900, stream: bool = False,
+                 **kwargs):
         # Calls can wait in NVIDIA's queue for several minutes (Mistral Large 4: up to ~8).
+        # Streaming sends the reply in pieces as it is written, which keeps long replies
+        # from being dropped; the timeout then limits the silence between pieces.
+        if stream:
+            kwargs.setdefault("post", _post_stream)
         super().__init__(model, timeout=timeout, **kwargs)
-        self.max_tokens = max_tokens
+        self.max_tokens, self.stream = max_tokens, stream
         self.name = "nvidia_" + model.replace("/", "_")
 
     def __call__(self, system: str, user: str) -> Reply:
@@ -455,6 +516,9 @@ class NvidiaJudge(HostedJudge):
             "max_tokens": self.max_tokens,
             "chat_template_kwargs": {"enable_thinking": False},
         }
+        if self.stream:
+            body["stream"] = True
+            body["stream_options"] = {"include_usage": True}
         return parse_openai(self._send(body, {"Authorization": f"Bearer {self._key}"}))
 
 
@@ -489,16 +553,30 @@ def backend_of(spec: str) -> str:
     return spec.partition(":")[0]
 
 
-def make_judge(spec: str, num_ctx: int = 16_384, rpm: Optional[float] = None):
+STREAM_TIMEOUT = 1200  # longest silence while streaming: covers NVIDIA's queue (up to ~8 min)
+
+
+def make_judge(spec: str, num_ctx: int = 16_384, rpm: Optional[float] = None,
+               max_tokens: Optional[int] = None, stream: bool = False):
+    """`max_tokens` (NVIDIA only) raises the reply limit for models that reason at length;
+    the call timeout grows with it (15 minutes per 4,096 tokens). `stream` (NVIDIA only)
+    streams replies instead, with the timeout limiting the silence between pieces."""
     backend, _, model = spec.partition(":")
     if not model:
         raise ValueError("judge must look like ollama:<model>, nvidia:<model> or gemini:<model>")
+    if (max_tokens or stream) and backend != "nvidia":
+        raise ValueError("max_tokens and stream are only supported for nvidia judges")
     if backend == "ollama":
         return OllamaJudge(model, num_ctx=num_ctx)
     if backend == "gemini":
         return GeminiJudge(model, rpm=rpm or DEFAULT_RPM["gemini"])
     if backend == "nvidia":
-        return NvidiaJudge(model, rpm=rpm or DEFAULT_RPM["nvidia"])
+        limits: Dict[str, object] = {}
+        if max_tokens:
+            limits.update(max_tokens=max_tokens, timeout=900 * max(1.0, max_tokens / 4096))
+        if stream:
+            limits.update(stream=True, timeout=STREAM_TIMEOUT)
+        return NvidiaJudge(model, rpm=rpm or DEFAULT_RPM["nvidia"], **limits)
     raise ValueError(f"unknown judge backend {backend!r}")
 
 
@@ -654,6 +732,10 @@ def main() -> None:
     parser.add_argument("--num-ctx", type=int, default=16_384, help="Ollama context window")
     parser.add_argument("--rpm", type=float, help="requests per minute for hosted judges")
     parser.add_argument("--workers", type=int, help="calls in parallel (default: 1 local, 16 NVIDIA, 2 Gemini)")
+    parser.add_argument("--max-tokens", type=int,
+                        help="reply token limit for NVIDIA judges (default 4096); use for replies cut off mid-reasoning")
+    parser.add_argument("--stream", action="store_true",
+                        help="stream NVIDIA replies in pieces, which keeps long replies from being dropped")
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
 
@@ -690,7 +772,8 @@ def main() -> None:
     plan = [(with_text(it, texts), orders) for it, orders in read_plan() if it.group in args.groups]
     tasks = plan_tasks(plan, args.seed)
     print(f"Plan: {len(plan)} items in groups {', '.join(args.groups)}, {len(tasks)} calls")
-    judge = make_judge(args.judge, num_ctx=args.num_ctx, rpm=args.rpm)
+    judge = make_judge(args.judge, num_ctx=args.num_ctx, rpm=args.rpm, max_tokens=args.max_tokens,
+                       stream=args.stream)
     workers = args.workers or DEFAULT_WORKERS.get(backend_of(args.judge), 1)
     stats = run(judge, tasks, JUDGMENTS_DIR / f"{judge.name}.jsonl", args.limit, workers)
     print(f"Done: {stats}")

@@ -19,7 +19,9 @@ from wrong_winner.judge import (
     OllamaJudge,
     Reply,
     _post,
+    _post_stream,
     build_messages,
+    collect_stream,
     load_done,
     make_judge,
     make_plan,
@@ -222,6 +224,64 @@ class TestBackends(unittest.TestCase):
         self.assertEqual((parse_verdict(reply.text), reply.in_tokens, reply.out_tokens), ("A", 1500, 7))
         self.assertEqual(reply.thought_tokens, 0)
 
+    def test_nvidia_stream_request(self):
+        seen = {}
+
+        def post(url, body, headers, timeout):
+            seen.update(body=body)
+            return 200, {"choices": [{"message": {"content": '{"verdict": "B"}'}, "finish_reason": "stop"}]}
+
+        judge = NvidiaJudge("m", api_key="k", rpm=0, stream=True, post=post, sleep=no_sleep)
+        self.assertEqual(parse_verdict(judge("sys", "user").text), "B")
+        self.assertTrue(seen["body"]["stream"])
+        self.assertEqual(seen["body"]["stream_options"], {"include_usage": True})
+        plain = NvidiaJudge("m", api_key="k", rpm=0, post=post, sleep=no_sleep)
+        plain("sys", "user")
+        self.assertNotIn("stream", seen["body"])
+
+    def test_collect_stream_joins_pieces(self):
+        def event(obj):
+            return ("data: " + json.dumps(obj) + "\n").encode()
+
+        lines = [
+            b": keep-alive\n",
+            event({"choices": [{"delta": {"role": "assistant"}}]}),
+            event({"choices": [{"delta": {"reasoning_content": "Answer A is "}}]}),
+            event({"choices": [{"delta": {"reasoning_content": "clearer."}}]}),
+            event({"choices": [{"delta": {"content": '{"verdict": '}}]}),
+            event({"choices": [{"delta": {"content": '"A"}'}, "finish_reason": "stop"}]}),
+            event({"choices": [], "usage": {"prompt_tokens": 1200, "completion_tokens": 5000}}),
+            b"data: [DONE]\n",
+        ]
+        reply = parse_openai(collect_stream(lines))
+        self.assertEqual(parse_verdict(reply.text), "A")
+        self.assertEqual((reply.in_tokens, reply.out_tokens, reply.thought_tokens), (1200, 5000, 5000))
+        self.assertEqual(reply.error, "")
+
+        # No usage report: count the pieces. A length stop is still flagged.
+        cut = [event({"choices": [{"delta": {"content": "x"}}]}),
+               event({"choices": [{"delta": {"content": "y"}, "finish_reason": "length"}]})]
+        reply = parse_openai(collect_stream(cut))
+        self.assertEqual(reply.out_tokens, 2)
+        self.assertIn("limit", reply.error)
+
+    def test_collect_stream_ended_early(self):
+        partial = [("data: " + json.dumps({"choices": [{"delta": {"content": "x"}}]})).encode()]
+        with self.assertRaises(ConnectionError):
+            collect_stream(partial)
+        with self.assertRaises(ConnectionError):
+            collect_stream([b'data: {"error": {"message": "overloaded"}}'])
+
+    def test_post_stream_turns_early_end_into_599(self):
+        resp = mock.MagicMock()
+        resp.__enter__.return_value = resp
+        resp.status = 200
+        resp.__iter__.return_value = iter([b'data: {"choices": [{"delta": {"content": "x"}}]}\n'])
+        with mock.patch("urllib.request.urlopen", return_value=resp):
+            status, data = _post_stream("https://example.invalid", {}, {}, 1)
+        self.assertEqual(status, 599)
+        self.assertIn("ended early", data["error"]["message"])
+
     def test_parse_openai_reasoning_and_length(self):
         data = {"choices": [{"message": {"content": "<think>hmm"}, "finish_reason": "length"}]}
         self.assertIn("limit", parse_openai(data).error)
@@ -295,6 +355,26 @@ class TestBackends(unittest.TestCase):
             make_judge("other:model")
         with self.assertRaises(ValueError):
             make_judge("ollama")
+
+    def test_make_judge_max_tokens(self):
+        with mock.patch.dict(os.environ, {"NVIDIA_API_KEY": "k"}):
+            default = make_judge("nvidia:some/model")
+            raised = make_judge("nvidia:some/model", max_tokens=16_384)
+        self.assertEqual((default.max_tokens, default.timeout), (4096, 900))
+        self.assertEqual((raised.max_tokens, raised.timeout), (16_384, 3600))
+        self.assertEqual(raised.name, default.name)  # same cache file, so the run resumes
+        with self.assertRaises(ValueError):
+            make_judge("ollama:qwen3:8b-q4_K_M", max_tokens=16_384)
+
+    def test_make_judge_stream(self):
+        with mock.patch.dict(os.environ, {"NVIDIA_API_KEY": "k"}):
+            judge = make_judge("nvidia:some/model", max_tokens=16_384, stream=True)
+        self.assertTrue(judge.stream)
+        self.assertEqual((judge.max_tokens, judge.timeout), (16_384, 1200))
+        self.assertIs(judge._post, _post_stream)
+        self.assertEqual(judge.name, "nvidia_some_model")
+        with self.assertRaises(ValueError):
+            make_judge("ollama:qwen3:8b-q4_K_M", stream=True)
 
 
 class TestRun(unittest.TestCase):
