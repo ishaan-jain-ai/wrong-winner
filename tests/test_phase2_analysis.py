@@ -14,6 +14,7 @@ from wrong_winner.run_phase2 import (
     build_pairs,
     family,
     family_rows,
+    leave_one_out_rows,
     outcome,
     position_row,
     primary_order,
@@ -291,6 +292,39 @@ def test_ppi_tuned_needs_labels():
         simulate_decisions(pair, n=10, k=0, method="ppi_tuned")
     with pytest.raises(ValueError):
         simulate_decisions(pair, n=10, k=20, method="ppi_tuned")
+
+
+def test_leave_one_out_drops_each_models_pairs():
+    def v(judge, pair, call, outcome_bt):
+        return {"judge": judge, "group": "close", "pair": pair, "judge_call": call, "outcome_bt": outcome_bt}
+
+    def g(judge, pair, overclaim):
+        method, k = ("judge", "0") if judge != HUMANS else ("human_only", "80")
+        return {"judge": judge, "group": "close", "pair": pair, "rule": "significant", "n": "80",
+                "k": k, "method": method, "overclaim_bt": str(overclaim), "wrong_bt": "0.0"}
+
+    pairs = ["x vs y", "x vs z", "y vs z"]
+    verdicts, grid = [], []
+    for j in ("j1", "j2", "j3"):
+        verdicts += [v(j, "x vs y", "A", "overclaim"), v(j, "x vs z", "none", "no_call"),
+                     v(j, "y vs z", "B" if j == "j1" else "A", "overclaim")]
+        grid += [g(j, p, 0.6 if p != "x vs z" else 0.0) for p in pairs]
+    verdicts += [v(HUMANS, p, "none", "no_call") for p in pairs]
+    grid += [g(HUMANS, p, 0.1) for p in pairs]
+    verdicts.append({**v("j1", "a vs b", "A", "overclaim"), "group": "clear"})  # ignored: not close
+
+    rows = leave_one_out_rows(verdicts, grid)
+    by = {(r["left_out"], r["judge"]): r for r in rows}
+    assert {r["left_out"] for r in rows} == {"(none)", "x", "y", "z"}
+    full = by[("(none)", "j1")]
+    assert (full["close_pairs"], full["unsupported_all_items"]) == (3, 2)
+    assert full["sim_unsupported_n80"] == pytest.approx(0.4)
+    assert full["pairs_shared_by_3_judges"] == 1  # x vs y: all three call A; y vs z splits 2 to 1
+    no_x = by[("x", "j1")]
+    assert (no_x["close_pairs"], no_x["unsupported_all_items"], no_x["pairs_shared_by_3_judges"]) == (1, 1, 0)
+    assert by[("y", "j2")]["unsupported_share"] == 0.0
+    assert by[("(none)", HUMANS)]["unsupported_all_items"] == 0
+    assert by[("(none)", HUMANS)]["sim_unsupported_n80"] == pytest.approx(0.1)
 
 
 def test_best_judge_weight():

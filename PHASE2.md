@@ -95,7 +95,8 @@ with 100+ votes) and [`results/phase2/pairs.csv`](results/phase2/pairs.csv) (the
   gives 48.7% but the pair's own 129 votes give 40.3% [33.2, 47.4]. Step 3 reports
   results under both truths.
 - **Some models appear often:** qwen3-235b-a22b-no-thinking is in 11 of the 40 pairs and
-  gemini-2.5-flash in 8. Step 3 checks that the findings hold with each model left out.
+  gemini-2.5-flash in 8. Step 3 checks that the findings hold with each model left out
+  (done 20 Nov: they do; see [First results](#first-results-20-nov)).
 
 ## Lean design (18 Nov)
 
@@ -291,9 +292,21 @@ items (95% interval): Qwen +1.6 [-2.3, +5.5] over 8 pairs, Gemma +2.3 [-1.2, +5.
 Mistral -2.9 [-8.5, +2.7] over 4 pairs. Qwen3 8B does rate Qwen models 8.4 points above the
 voters, but the other judges do much the same.
 
+**Leave one model out (robustness, 20 Nov).** Rerun with every pair that includes a given model
+dropped, for each of the 17 models in the close pairs (`leave_one_out.csv`):
+- **The headline holds for every model left out.** Each judge still makes calls humans don't back
+  on 25-55% of the remaining close pairs (all 15: 33-47%), and the same human votes on 0%.
+  In simulated 80-item evals: judges 34-53%, humans alone 12-17%.
+- **qwen3-235b** (4 close pairs) changes little: 5 of the 11 remaining pairs for every judge.
+- **chatgpt-4o-latest moves the numbers most** (3 close pairs). Without it, judges overclaim on
+  3-5 of 12 pairs; Gemma and Mistral drop to 3 of 12 (25%).
+- **Shared invented winners rest on a few pairs.** 3 or more judges make the same unsupported call on
+  4 of the 15 close pairs, and on 2-4 with any one model left out. Two of the 4 involve ChatGPT-4o
+  (against o3 and Grok 3) and two Gemini 2.5 Flash (against DeepSeek R1 and Llama 4 Maverick),
+  so the panel point is real but rests on a handful of pairs.
+
 **Still to do:**
 - figures (needs matplotlib, not installed yet);
-- leave-one-model-out check: qwen3-235b is in 8 of the 25 judged pairs;
 - the Phase 2 findings write-up;
 - optional Gemini judge.
 

@@ -15,6 +15,8 @@ results/phase2/analysis/:
 - position.csv  RQ9: how often each judge changes its verdict when the answers swap
 - family.csv    RQ7: does a judge favour a model from its own family
 - summary.csv   headline numbers per judge (RQ8 reads down the size ladder)
+- leave_one_out.csv  the close-pair headline with each model's pairs left out
+                (`--leave-one-out-only` redoes just this from the saved CSVs)
 
 Each item is scored once, in its planned answer order (a fixed coin flip), as a
 team running one call per item would. The 100 items shown both ways feed RQ9 only.
@@ -581,6 +583,80 @@ def _majority(grid: List[dict], judge: str, method: str, n: int, k: int) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Robustness: leave one model out
+# ---------------------------------------------------------------------------
+
+SHARED_BY = 3  # judges that must make the same unsupported call for it to count as shared
+
+
+def _models(pair_name: str) -> List[str]:
+    return pair_name.split(" vs ")
+
+
+def leave_one_out_rows(verdicts: List[dict], grid: List[dict]) -> List[dict]:
+    """Close-pair headline numbers with every pair that includes one model left out.
+
+    Works on rows built in memory or read back from verdicts.csv and grid.csv.
+    Per left-out model and judge (humans included): close pairs where the call on
+    all items isn't backed by humans (main truth), the simulated 80-item evals
+    making such a call, and close pairs where at least SHARED_BY judges make the
+    same unsupported call. The first rows ("(none)") leave nothing out.
+    """
+    close_v = [v for v in verdicts if v["group"] == "close"]
+    close_g = [
+        g for g in grid
+        if g["group"] == "close" and g["rule"] == "significant" and int(g["n"]) == 80
+        and (g["method"] == "judge" or (g["method"] == "human_only" and int(g["k"]) == 80))
+    ]
+    judges = list(dict.fromkeys(v["judge"] for v in close_v))
+    models = sorted({m for v in close_v for m in _models(v["pair"])})
+    rows = []
+    for left_out in [None] + models:
+        kept_v = [v for v in close_v if left_out not in _models(v["pair"])]
+        calls: Dict[str, Counter] = {}
+        for v in kept_v:
+            if v["judge"] != HUMANS and v["outcome_bt"] in ("overclaim", "wrong"):
+                calls.setdefault(v["pair"], Counter())[v["judge_call"]] += 1
+        shared = sum(1 for c in calls.values() if max(c.values()) >= SHARED_BY)
+        for judge in judges:
+            jv = [v for v in kept_v if v["judge"] == judge]
+            jg = [g for g in close_g if g["judge"] == judge and left_out not in _models(g["pair"])]
+            if not jv:
+                continue
+            bad = sum(v["outcome_bt"] in ("overclaim", "wrong") for v in jv)
+            sim = [float(g["overclaim_bt"]) + float(g["wrong_bt"]) for g in jg]
+            rows.append({
+                "left_out": left_out or "(none)",
+                "close_pairs": len(jv),
+                "judge": judge,
+                "unsupported_all_items": bad,
+                "unsupported_share": round(bad / len(jv), 4),
+                "sim_unsupported_n80": round(fmean(sim), 4) if sim else "",
+                "pairs_shared_by_3_judges": shared,
+            })
+    return rows
+
+
+def print_leave_one_out(rows: List[dict]) -> None:
+    print("\nLeave one model out (close pairs; every pair with that model dropped)")
+    print(f"  {'judge':18s} {'all pairs':>10s} {'range over left-out models':>27s}   "
+          f"{'sim n=80: all':>13s} {'range':>15s}")
+    for judge in dict.fromkeys(r["judge"] for r in rows):
+        rs = [r for r in rows if r["judge"] == judge]
+        full, rest = rs[0], rs[1:]
+        lo = min(rest, key=lambda r: r["unsupported_share"])
+        hi = max(rest, key=lambda r: r["unsupported_share"])
+        sims = [float(r["sim_unsupported_n80"]) for r in rest]
+        print(f"  {judge:18s} {full['unsupported_all_items']:>3d} of {full['close_pairs']:<3d}  "
+              f"{float(lo['unsupported_share']):6.1%} to {float(hi['unsupported_share']):6.1%}"
+              f" (lowest without {lo['left_out'][:22]})   "
+              f"{float(full['sim_unsupported_n80']):12.1%}  {min(sims):6.1%} to {max(sims):6.1%}")
+    shared = {r["left_out"]: r["pairs_shared_by_3_judges"] for r in rows}
+    print(f"  Close pairs where {SHARED_BY}+ judges make the same unsupported call: {shared['(none)']} of all; "
+          f"{min(shared.values())} to {max(shared.values())} with one model left out")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -666,7 +742,20 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--jobs", type=int, default=5, help="processes for the simulation grid")
     parser.add_argument("--out", type=Path, default=OUT_DIR)
+    parser.add_argument("--leave-one-out-only", action="store_true",
+                        help="only redo the leave-one-model-out check from the saved verdicts.csv and grid.csv")
     args = parser.parse_args()
+
+    if args.leave_one_out_only:
+        saved = {}
+        for name in ("verdicts", "grid"):
+            with (args.out / f"{name}.csv").open(newline="") as f:
+                saved[name] = list(csv.DictReader(f))
+        loo = leave_one_out_rows(saved["verdicts"], saved["grid"])
+        write_csv(args.out / "leave_one_out.csv", loo)
+        print(f"Wrote {len(loo):5d} rows to {args.out / 'leave_one_out.csv'}")
+        print_leave_one_out(loo)
+        return
 
     pairs = read_pairs()
     plan = read_plan(PLAN_CSV)
@@ -690,12 +779,14 @@ def main() -> None:
     position = [position_row(i.key, plan, all_verdicts[i.key], args.seed) for i in infos]
     fam = family_rows(infos, pairs, judged)
     summary = summary_rows(infos, pairs, verdicts, grid, position, judged)
+    loo = leave_one_out_rows(verdicts, grid)
 
     for name, rows in (("verdicts", verdicts), ("grid", grid), ("position", position),
-                       ("family", fam), ("summary", summary)):
+                       ("family", fam), ("summary", summary), ("leave_one_out", loo)):
         write_csv(args.out / f"{name}.csv", rows)
         print(f"Wrote {len(rows):5d} rows to {args.out / f'{name}.csv'}")
     print_summary(summary, position, fam)
+    print_leave_one_out(loo)
 
 
 if __name__ == "__main__":
