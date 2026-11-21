@@ -305,8 +305,23 @@ dropped, for each of the 17 models in the close pairs (`leave_one_out.csv`):
   (against o3 and Grok 3) and two Gemini 2.5 Flash (against DeepSeek R1 and Llama 4 Maverick),
   so the panel point is real but rests on a handful of pairs.
 
+**Figures (21 Nov).** `python -m wrong_winner.figures` draws five figures from the analysis
+CSVs alone (no raw data or judges needed) into [`results/phase2/figures/`](results/phase2/figures/),
+as PNG for posts and SVG for the README. Needs `pip install -e ".[figures]"` (matplotlib 3.11).
+Rebuilds are byte-identical.
+
+| Figure | Shows |
+|---|---|
+| `fig1_close_pairs` | Every close pair: each judge's 80-item win rate and interval against all Arena votes |
+| `fig2_more_items` | Unsupported calls rise from 18-26% to 38-46% as evals grow from 25 to 80 items; humans 8% to 14% |
+| `fig3_human_labels` | What k = 10/25/50 human labels buy: PPI, PPI++, the labels alone, a reused correction |
+| `fig4_position_bias` | Verdict changes on swap (26-51%) and first-answer wins (58.5-68.5%) |
+| `fig5_leave_one_out` | The headline with each of the 17 models left out in turn |
+
+Humans are always blue and judges orange; the five colours are the first five slots of a
+colour-vision-checked palette, and every line is labelled directly.
+
 **Still to do:**
-- figures (needs matplotlib, not installed yet);
 - the Phase 2 findings write-up;
 - optional Gemini judge.
 
