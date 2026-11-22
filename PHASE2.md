@@ -275,8 +275,10 @@ below also holds with the pair's own votes as the truth.
 reasoning judge is lowest in the simulated evals (38%), but that is one judge.
 
 **RQ9 position bias** (100 close items shown both ways): judges change their verdict when the
-answers swap on **26-51%** of items (GPT-4 on MT-Bench in 2023: 16%, though that was over all
-pairs, not close ones). Mostly toward the first answer: Nemotron chose the first answer both
+answers swap on **26-51%** of items. That is in line with GPT-4 in 2023, which changed 35% of
+verdicts on near-identical answers (Zheng et al., Table 2); over all MT-Bench pairs, the
+dataset's GPT-4 judgments changed 16% (Phase 1). See [LITERATURE.md](LITERATURE.md). Mostly
+toward the first answer: Nemotron chose the first answer both
 times on 41 of 100 items. Over all calls, the first answer wins 58.5-68.5% of decisive verdicts.
 
 | Judge | Verdict changes on swap | First answer both times | Second answer both times | One tie | First answer wins (decisive calls) |
@@ -337,7 +339,7 @@ Haiku 5.5 and about $3 for Sonnet 5.5 through the Batch API. Optional.
   less on the close pairs? Mistral Large 4 also reasons, so its point mixes size and reasoning.
 - **RQ9 – Position bias now:** on the 100 items shown both ways, how often does each judge
   (except Gemini, which sees one order) change its verdict when the answers swap (GPT-4 in
-  2023: 16%)? In the pilot the 8B judge kept the same verdict for only 3 of 10 items.
+  2023: 35% on near-identical answers, 16% over all MT-Bench pairs)? In the pilot the 8B judge kept the same verdict for only 3 of 10 items.
 
 Headline metric: **share of close pairs where a judge-only 200-item eval confidently picks a winner the human verdict doesn't support**, per judge, and how far 10/25/50 human labels bring it down.
 
