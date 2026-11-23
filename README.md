@@ -7,6 +7,8 @@ Teams decide whether to ship a prompt or model change by running a small eval
 how often that process picks a different winner than human raters would, and
 how many human labels it takes to fix it.
 
+> **Write-up:** [Your LLM judge says v2 wins. It might be a tie.](https://ishaan-jain-ai.github.io/llm-judge-ties/), an 8-minute read with the charts.
+>
 > **Status:** Phase 1 (MT-Bench, GPT-4 judge) is done: results in [FINDINGS.md](FINDINGS.md).
 > Phase 2 (four current judges on close LMArena comparisons) has results and figures in [PHASE2.md](PHASE2.md).
 > To check your own A/B eval, see [Check your own A/B eval](#check-your-own-ab-eval).
